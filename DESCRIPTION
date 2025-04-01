@@ -1,0 +1,17 @@
+Package: pericircumference
+Title: Set up a project using Perisphere's approach to targets
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Byron", "Jaeger", , "bjaeger@wakehealth.edu", role=c("aut", "cre"),
+           comment = c(ORCID="0000-0001-7399-2299"))
+  )
+Description: Provides templates to initialize new projects using targets.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    cli,
+    glue,
+    readr,
+    usethis
