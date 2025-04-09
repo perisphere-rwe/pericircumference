@@ -4,7 +4,7 @@
 \alias{use_pericircumference}
 \title{Initialize pericircumference workflow}
 \usage{
-use_pericircumference(results_format = "word")
+use_pericircumference(results_format = "word", include_tutorials = TRUE)
 }
 \arguments{
 \item{results_format}{a character value indicating the format of the
@@ -12,6 +12,13 @@ results document. Valid options are
 \itemize{
 \item "word": use \code{officedown::rdocx_document} results document
 }}
+
+\item{include_tutorials}{a logical value indicating whether to use file
+templates for \verb{_targets.R} and \code{doc/results.Rmd}. The tutorial versions
+contain illustrations of targets and tools inside of the results document
+that should be helpful for newer users. The blank versions (i.e., the
+ones you get with \code{include_tutorials = FALSE}) should be more helpful
+for users who are familiar with the tools and just want to get files.}
 }
 \value{
 Nothing. Modifies your workspace.

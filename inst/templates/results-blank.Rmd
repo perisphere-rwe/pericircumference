@@ -156,16 +156,15 @@ page_wide_above <- function(margins = make_margin('narrow')){
 
 ```{r setup-targets}
 
-withr::with_dir(
-  new = here::here(),
-  code = {
-    targets::tar_load(names = c(data, meta, stats))
-  }
-)
+# uncomment when there are targets to load
+# withr::with_dir(
+#   new = here::here(),
+#   code = {
+#     targets::tar_load(names = c())
+#   }
+# )
 
 ```
-
-
 
 ```{r setup-formatters}
 
@@ -178,37 +177,7 @@ r_version <- tg("{version$major}.{version$minor}")
 
 ```
 
-\newpage
-
-Essentials for writing text are shown here. Demonstrations include creating a section and subsection, writing items in a bulleted list, citing items that are defined in `refs.bib`, and inserting R objects into the text.
-
-# Section
-
-A bulleted list:
-
-- Results were produced with R version `r r_version`.[@r_language]
-
-- Here's how to cite two or more things.[@orsf_aoas; @aorsf_joss; @aorsf_jcgs]
-
-## Subsection
-
-Here's how to put some results into the text: A total of `r tv(stats$.overall$nobs)` were included in the current analysis. The mean bill length was `r tv(stats$.overall$mean_bill_length)`. The mean (standard deviation) body mass was `r with(stats$.overall, tg("{mean_mass} ({sd_mass})"))`
-
-# References
-
-In case they are needed.
-
-<div id="refs"></div>
-
-\newpage
-
-# Tables
-
-A convention worth following is to make each table a sub section. This makes the table easier to find from the table of contents and also from the built-in Rstudio navigator. Another good convention is to start a new page for each table (use the `\newpage` command)
-
-\newpage
-
-```{r tbl_setup}
+```{r setup-tables}
 
 # Footnotes should be wrapped in `as_paragraph`:
 
@@ -217,14 +186,21 @@ ckd_defn <- as_paragraph("Chronic Kidney Disease was defined by an estimated glo
 # abbreviation management
 
 abbrvs <- list(
-  CI   = 'confidence interval',
-  FI   = 'frailty index',
-  SD   = 'standard deviation',
-  IQR  = 'interquartile range',
-  MoCA = 'Montreal cognitive assessment',
-  EHR  = 'electronic health records',
-  CVD  = 'cardiovascular disease'
+  "SD"   = 'standard deviation',
+  "ACR" =	"Albumin-to-creatinine ratio",
+  "ASCVD" =	"Atherosclerotic cardiovascular disease",
+  "CI" =	"Confidence interval",
+  "COPD" =	"Chronic obstructive pulmonary disease",
+  "eGFR" =	"Estimated glomerular filtration rate",
+  "GLP-1RA" =	"Glucagon-like peptide-1 receptor agonist ",
+  "HbA1c" =	"Glycated hemoglobin",
+  "HDL" =	"High-density lipoprotein",
+  "hsCRP" =	"High-sensitivity C-reactive protein",
+  "NHANES" =	"National Health and Nutrition Examination Survey",
+  "PHQ" =	"Patient Health Questionnaire"
 )
+
+
 
 abbrvs_paste <- function(strings){
   
@@ -250,103 +226,7 @@ abbrvs_write <- function(abbr){
 ```
 
 
-## Table 1: Penguin characteristics
-
-```{r}
-
-footer_tbl_val <- "Table values are n (%) or median (25th, 75th percentile)"
-
-data %>% 
-  infuse_dictionary(meta, units = 'descriptive') %>% 
-  tbl_summary(by = 'island', missing = 'no') %>% 
-  modify_footnote(c(all_stat_cols()) ~ NA) %>% 
-  as_flex_table() %>% 
-  theme_box() %>% 
-  add_footer_lines(footer_tbl_val) %>% 
-  align(j = c(2,3,4), align = 'center', part = 'all')
-
-```
-
 \newpage
 
-## Table 2: A more customized table
+# Section
 
-```{r}
-
-data %>% 
-  group_by(species) %>% 
-  slice(1:3) %>% 
-  select(-body_mass_g, -sex, -year) %>% 
-  mutate(across(where(is.numeric), table_value)) %>% 
-  as_grouped_data(groups = 'species') %>% 
-  # infuse after as_grouped_data, b/c as_grouped_data can
-  # wipe away attributes, which will delete your labels.
-  infuse_dictionary(meta, units = 'descriptive') %>% 
-  as_flextable(hide_grouplabel = TRUE) %>% 
-  add_header_row(values = c(" ", " Penguin things"),
-                 colwidths = c(1, 3)) %>% 
-  bg(i = ~!is.na(species), bg = 'grey90') %>% 
-  width(width = 1.5) %>% 
-  width(j = 1, width = 2) %>% 
-  align(part = 'all', j = c(2,3,4), align = 'center') %>% 
-  footnote(i = 2, j = 2, 
-           part = 'header',
-           value = as_paragraph("Chinstraps boast the highest average bill length."),
-           ref_symbols = '1') %>% 
-  footnote(i = 1, j = 1, 
-           part = 'body',
-           value = as_paragraph('Adelies know they are a crowd favorite'), 
-           ref_symbols = '2') %>% 
-  add_footer_lines(values = abbrvs_write(abbrvs[c('CI', 'EHR', 'SD')])) %>% 
-  add_footer_lines(values = "none of those abbreviations are in the table but they demonstrate how to include abbreviations using my helper functions")
-
-```
-
-
-<!-- new page not needed at the end of a block section -->
-
-`r page_long_above()`
-
-To make a landscape section, use the block_section code here. Note that the section will be applied to all content prior to the block reaching up to the most recent block.
-
-`r page_wide_above()`
-
-To switch back to regular portrait section, add another portrait block. Notice how the block below acts on all content above it up to the prior block.
-
-\newpage
-
-# Figures
-
-The default figure margins are set by the `page_long_above()` and `page_wide_above()`. You can change those to your preference by either modifying the functions or by setting `fig.width` and `fig.height` in the code chunk that prints the figure.
-
-\newpage
-
-## Figure 1: Penguin dimensions (normal version)
-
-```{r}
-
-fig <- ggplot(data = data) + 
-  aes(x = bill_length_mm, y = bill_depth_mm, color = species) + 
-  geom_point()
-
-fig
-
-```
-
-There is a `theme_set()` command at the beginning of the document that sets our preferred `ggplot` theme. It aims to use the same font family and font size in the plots as is used in the text. I recommend changing the `ggplot` theming if you decide to use a different style for the word doc. If you want to just lightly modify the theme for specific plots, you can use the `theme()` function to add your flair. 
-
-`r page_long_above()`
-
-
-## Figure 2: Penguin dimensions (wide version)
-
-```{r}
-
-fig + 
-  theme(panel.border = element_blank())
-
-```
-
-Hang on, how did the figure size change? That is an intended side effect of `page_long_above()` and `page_wide_above()`. Notably, if you ever want to avoid this convenient side effect, you can override it by setting `fig.width = X` and `fig.height = Y` where X and Y are your preferred figure width and height, in inches.
-
-`r page_wide_above()`
