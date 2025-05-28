@@ -15,6 +15,8 @@ library(glue)
 library(table.glue)
 # standardize filepaths (quite important for docs)
 library(here)
+# render html report (feel free to delete if using MS word)
+library(quarto)
 # Perisphere tools
 library(pericircle)
 # Perisphere container

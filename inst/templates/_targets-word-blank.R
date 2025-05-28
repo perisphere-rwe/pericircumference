@@ -30,7 +30,7 @@ tar_plan(
   # document targets ----
 
   tar_render(
-    results,
+    doc_results,
     path = here::here("doc/results.Rmd"),
     output_file = paste0("results", "-v", results_version_major, "/",
                          "results-", basename(here()),
@@ -44,3 +44,5 @@ tar_plan(
     hook = {source("conflicts.R")},
     names = everything()
   )
+
+

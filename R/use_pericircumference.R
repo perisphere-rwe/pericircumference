@@ -28,14 +28,12 @@
 use_pericircumference <- function(results_format = "word",
                                   include_tutorials = TRUE){
 
-  # TODO: write html template so i can remove this
-  stopifnot(results_format == 'word')
 
   file_suffix <- ifelse(include_tutorials, 'tutorial', 'blank')
+  md_type <- switch(results_format, 'word' = 'Rmd', 'html' = 'qmd')
 
-  targets_fname <- glue::glue("_targets-{file_suffix}.R")
-  results_fname <- glue::glue("results-{file_suffix}.Rmd")
-  results_fpath <- file.path("doc", "results.Rmd")
+  targets_fname <- glue::glue("_targets-{results_format}-{file_suffix}.R")
+  results_fname <- glue::glue("results-{results_format}-{file_suffix}.{md_type}")
 
   usethis::use_directory("R")
   usethis::use_directory("doc")
@@ -75,16 +73,22 @@ use_pericircumference <- function(results_format = "word",
 
   }
 
-  if (file.exists(results_fpath)) {
+  results_doc <- glue::glue("results.{md_type}")
 
-    message(results_fpath, " already exists and was not overwritten.")
+  if(results_format == 'word'){
+    results_doc <- file.path('doc', results_doc)
+  }
 
-    return(invisible(results_fpath))
+  if (file.exists(results_doc)) {
+
+    message(results_doc, " already exists and was not overwritten.")
+
+    return(invisible(results_doc))
 
   }
 
   usethis::use_template(results_fname,
-                        save_as = results_fpath,
+                        save_as = results_doc,
                         package = "pericircumference")
 
 }

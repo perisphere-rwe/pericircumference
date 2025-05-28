@@ -60,15 +60,34 @@ tar_plan(
 
   }),
 
-  tar_render(
-    results,
-    path = here::here("doc/results.Rmd"),
-    output_file = paste0("results", "-v", results_version_major, "/",
-                         "results-", basename(here()),
-                         "-v", results_version_major,
-                         "-",  results_version_minor,
-                         ".docx")
-  )
+  tar_target(results_file, "results.qmd", format = 'file'),
+
+  tar_target(results, command = {
+
+    output_file <- paste0("results-", basename(here()),
+                          "-v", results_version_major,
+                          "-",  results_version_minor,
+                          ".html")
+
+    output_dir <- paste0("results", "-v", results_version_major)
+
+    quarto_render(input = results_file, output_file = output_file)
+
+    file_moved <- file.copy(from = output_file,
+                            to = file.path('doc', output_dir, output_file),
+                            overwrite = TRUE)
+
+    if(file_moved){
+      file.remove(output_file)
+    } else {
+      stop(
+        "could not copy results output. Check results target in _targets.R"
+      )
+    }
+
+    NULL
+
+  })
 
 ) %>%
   tar_hook_before(

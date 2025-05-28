@@ -1,0 +1,153 @@
+---
+title: "Perisphere Template: Results Report"
+subtitle: "Start here when making deliverables with html"
+author: "[Byron C. Jaeger, PhD](https://www.byronjaeger.com/)"
+date: "Document created on `r format(Sys.time(), '%B %d, %Y')`" 
+bibliography: doc/refs.bib
+csl: doc/refs.csl
+always_allow_html: true
+format: 
+  html:
+    embed-resources: true
+    toc: true
+    toc-location: right
+    toc-title: "Contents"
+    toc-floating: true
+    number-sections: true
+    smooth-scroll: true
+    theme: flatly
+    code-fold: true
+    code-tools: true
+    highlight-style: github
+    df-print: paged
+    mainfont: Arial
+    fontsize: 11pt
+---
+
+```{r setup-knitr, include=FALSE}
+
+knitr::opts_chunk$set(
+  echo = FALSE,    # don't show code blocks
+  message = FALSE, # don't print messages to the doc
+  warning = FALSE, # don't print warnings to the doc
+  dpi = 300,       # higher dpi => higher render time 
+  fig.width = 6,   # default figure width in inches
+  fig.height = 4   # default figure height in inches
+)
+
+# Hello! This is the template html document for Perisphere reports.
+# There are several code chunks used to set up the format of the
+# document below. You don't have to modify those unless you want 
+# to change the format of your output. 
+
+```
+
+```{r setup-pkgs}
+
+# packages are usually handled by packages.R (in main directory).
+# When tar_make() is run, it loads everything in packages.R.
+# Assuming this document is in the list of targets (see ?tar_render),
+# you won't need to include the library calls below.
+# however, the template includes packages in its initial form
+# so that you can knit the document without having to run tar_make().
+# The library calls can safely be removed once the required packages
+# are in packages.R and this doc is part of the targets pipeline.
+
+# standards for word docs
+library(officer)
+library(flextable)
+
+# specify a rounding specification 
+library(table.glue)
+
+# general purpose
+library(tidyverse)
+
+# table 1
+library(gtsummary)
+library(pericircle)
+
+```
+
+```{r setup-figures}
+
+theme_set(
+  new = theme_bw() + 
+    theme(panel.grid = element_blank(),
+          text = element_text(size = 12))
+)
+
+```
+
+
+```{r setup-targets}
+
+withr::with_dir(
+  new = here::here(),
+  code = {
+    targets::tar_load(names = c(data, meta, stats))
+  }
+)
+
+```
+
+
+
+```{r setup-formatters}
+
+# make a short name for table.glue::table_value - this makes
+# the inline reporting of results less complicated to read.
+tv <- table.glue::table_value
+tg <- table.glue::table_glue
+
+r_version <- tg("{version$major}.{version$minor}")
+
+```
+
+```{r setup-tables}
+
+# Footnotes should be wrapped in `as_paragraph`:
+
+ckd_defn <- "Chronic Kidney Disease was defined by an estimated glomerular filtration rate <60 ml/min/1.73 m<sup>2</sup> based on the 2021 CKD-EPI creatinine equation."
+
+# abbreviation management
+
+abbrvs <- list(
+  CI   = 'confidence interval',
+  FI   = 'frailty index',
+  SD   = 'standard deviation',
+  IQR  = 'interquartile range',
+  MoCA = 'Montreal cognitive assessment',
+  EHR  = 'electronic health records',
+  CVD  = 'cardiovascular disease'
+)
+
+abbrvs_paste <- function(strings){
+  
+  front <- 'Abbreviations'
+  
+  matter <- glue::glue_collapse(strings, sep = '; ', last = '; and ')
+  
+  paste(front, matter, sep = ': ')
+  
+}
+
+abbrvs_write <- function(abbr){
+  
+  sorted <- abbr[sort(names(abbr))]
+  
+  strings <- map2_chr(names(sorted), sorted, paste, sep = ' = ')
+  
+  abbrvs_paste(strings)
+  
+}
+
+
+```
+
+
+
+Essentials for writing text are shown here. Demonstrations include creating a section and subsection, writing items in a bulleted list, citing items that are defined in `refs.bib`, and inserting R objects into the text.
+
+# Section
+
