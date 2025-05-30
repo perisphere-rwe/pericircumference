@@ -10,10 +10,12 @@ format:
   html:
     embed-resources: true
     toc: true
-    toc-location: right
+    toc-location: body
+    css: doc/styles.css
+    include-in-header: doc/toc-button.html
     toc-title: "Contents"
-    toc-floating: true
-    number-sections: true
+    toc-floating: false
+    number-sections: false
     smooth-scroll: true
     theme: flatly
     code-fold: true
@@ -42,32 +44,6 @@ knitr::opts_chunk$set(
 
 ```
 
-```{r setup-pkgs}
-
-# packages are usually handled by packages.R (in main directory).
-# When tar_make() is run, it loads everything in packages.R.
-# Assuming this document is in the list of targets (see ?tar_render),
-# you won't need to include the library calls below.
-# however, the template includes packages in its initial form
-# so that you can knit the document without having to run tar_make().
-# The library calls can safely be removed once the required packages
-# are in packages.R and this doc is part of the targets pipeline.
-
-# standards for word docs
-library(officer)
-library(flextable)
-
-# specify a rounding specification 
-library(table.glue)
-
-# general purpose
-library(tidyverse)
-
-# table 1
-library(gtsummary)
-library(pericircle)
-
-```
 
 ```{r setup-figures}
 
@@ -82,12 +58,13 @@ theme_set(
 
 ```{r setup-targets}
 
-withr::with_dir(
-  new = here::here(),
-  code = {
-    targets::tar_load(names = c(data, meta, stats))
-  }
-)
+# # uncomment when there are targets to load
+# withr::with_dir(
+#   new = here::here(),
+#   code = {
+#     targets::tar_load(names = c())
+#   }
+# )
 
 ```
 
@@ -145,9 +122,10 @@ abbrvs_write <- function(abbr){
 
 ```
 
+# Overview
 
+# Primary analysis
 
-Essentials for writing text are shown here. Demonstrations include creating a section and subsection, writing items in a bulleted list, citing items that are defined in `refs.bib`, and inserting R objects into the text.
+# Secondary analysis
 
-# Section
-
+# Sensitivity analysis

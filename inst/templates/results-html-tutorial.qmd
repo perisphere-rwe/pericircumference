@@ -10,10 +10,12 @@ format:
   html:
     embed-resources: true
     toc: true
-    toc-location: right
+    toc-location: body
+    css: doc/styles.css
+    include-in-header: doc/toc-button.html
     toc-title: "Contents"
-    toc-floating: true
-    number-sections: true
+    toc-floating: false
+    number-sections: false
     smooth-scroll: true
     theme: flatly
     code-fold: true
@@ -144,7 +146,6 @@ abbrvs_write <- function(abbr){
 
 
 ```
-
 
 
 Essentials for writing text are shown here. Demonstrations include creating a section and subsection, writing items in a bulleted list, citing items that are defined in `refs.bib`, and inserting R objects into the text.

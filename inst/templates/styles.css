@@ -1,0 +1,30 @@
+#tocButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  background-color: #007ACC;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+#tocButton:hover {
+  background-color: #005FA3;
+}
+
+/* Force the outer container to expand */
+.page-columns {
+  max-width: 100% !important;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+/* Optionally widen the content column itself */
+.content {
+  max-width: 100% !important;
+}

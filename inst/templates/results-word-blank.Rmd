@@ -156,7 +156,7 @@ page_wide_above <- function(margins = make_margin('narrow')){
 
 ```{r setup-targets}
 
-# uncomment when there are targets to load
+# # uncomment when there are targets to load
 # withr::with_dir(
 #   new = here::here(),
 #   code = {
@@ -228,5 +228,11 @@ abbrvs_write <- function(abbr){
 
 \newpage
 
-# Section
+# Overview
+
+# Primary analysis
+
+# Secondary analysis
+
+# Sensitivity analysis
 

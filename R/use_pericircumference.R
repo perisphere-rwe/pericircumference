@@ -58,7 +58,23 @@ use_pericircumference <- function(results_format = "word",
                         save_as = "doc/changelog.md",
                         package = "pericircumference")
 
+  if(results_format == 'html'){
+
+    results_doc <- glue::glue("results.{md_type}")
+
+    usethis::use_template("toc-button.html",
+                          save_as = "doc/toc-button.html",
+                          package = "pericircumference")
+
+    usethis::use_template("styles.css",
+                          save_as = "doc/styles.css",
+                          package = "pericircumference")
+
+  }
+
   if(results_format == 'word'){
+
+    results_doc <- file.path('doc', glue::glue("results.{md_type}"))
 
     fpath_style <- system.file("templates", "style_arial.docx",
                                package = "pericircumference")
@@ -71,12 +87,6 @@ use_pericircumference <- function(results_format = "word",
       )
     )
 
-  }
-
-  results_doc <- glue::glue("results.{md_type}")
-
-  if(results_format == 'word'){
-    results_doc <- file.path('doc', results_doc)
   }
 
   if (file.exists(results_doc)) {
