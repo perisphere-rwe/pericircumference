@@ -46,6 +46,10 @@ use_pericircumference <- function(results_format = "word",
   usethis::use_template("conflicts.R",  package = "pericircumference")
   usethis::use_template(".gitignore",   package = "pericircumference")
 
+  usethis::use_template("summarize_each_group.R",
+                        save_as = "R/summarize_each_group.R",
+                        package = "pericircumference")
+
   usethis::use_template("refs.bib",
                         save_as = "doc/refs.bib",
                         package = "pericircumference")

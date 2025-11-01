@@ -166,6 +166,15 @@ withr::with_dir(
 ```
 
 
+```{r setup-dictionary}
+
+# As the default dictionary, meta is applied to translate_ functions without
+# needing to be explicitly supplied in the dictionary argument.
+set_default_dictionary(meta)
+
+```
+
+
 
 ```{r setup-formatters}
 
