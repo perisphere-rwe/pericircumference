@@ -258,7 +258,7 @@ A convention worth following is to make each table a sub section. This makes the
 footer_tbl_val <- "Table values are n (%) or median (25th, 75th percentile)"
 
 data %>% 
-  infuse_dictionary(meta, units = 'descriptive') %>% 
+  translate_data(meta, units = 'descriptive') %>% 
   tbl_summary(by = 'island', missing = 'no') %>% 
   modify_footnote(c(all_stat_cols()) ~ NA) %>% 
   as_flex_table() %>% 
@@ -282,7 +282,7 @@ data %>%
   as_grouped_data(groups = 'species') %>% 
   # infuse after as_grouped_data, b/c as_grouped_data can
   # wipe away attributes, which will delete your labels.
-  infuse_dictionary(meta, units = 'descriptive') %>% 
+  translate_data(meta, units = 'descriptive') %>% 
   as_flextable(hide_grouplabel = TRUE) %>% 
   add_header_row(values = c(" ", " Penguin things"),
                  colwidths = c(1, 3)) %>% 

@@ -19,5 +19,4 @@ library(here)
 library(quarto)
 # Perisphere tools
 library(pericircle)
-# Perisphere container
-library(pericircumference)
+

@@ -30,8 +30,8 @@ tar_plan(
                bill_depth_mm = "Bill depth",
                year = "Collection year",
                island = "Collection location") %>%
-    set_factor_order(sex = "male") %>%
-    set_factor_labels(sex = c(female = "Females", male = "Males")) %>%
+    set_category_order(sex = "male") %>%
+    set_category_labels(sex = c(female = "Females", male = "Males")) %>%
     set_units(bill_length_mm = "mm",
               bill_depth_mm = "mm",
               flipper_length_mm = "mm",
