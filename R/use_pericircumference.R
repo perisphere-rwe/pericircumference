@@ -50,6 +50,10 @@ use_pericircumference <- function(results_format = "word",
                         save_as = "R/summarize_each_group.R",
                         package = "pericircumference")
 
+  usethis::use_template("flextable.R",
+                        save_as = "R/flextable.R",
+                        package = "pericircumference")
+
   usethis::use_template("refs.bib",
                         save_as = "doc/refs.bib",
                         package = "pericircumference")
