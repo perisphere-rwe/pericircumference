@@ -8,7 +8,7 @@ csl: refs.csl
 always_allow_html: true
 output: 
   officedown::rdocx_document:
-    reference_docx: style_arial.docx
+    reference_docx: perisphere_template.docx
     keep_md: true
     toc: true
     toc_depth: 2
@@ -50,6 +50,7 @@ library(table.glue)
 
 # general purpose
 library(tidyverse)
+library(pericircle)
 
 # table 1
 library(gtsummary)

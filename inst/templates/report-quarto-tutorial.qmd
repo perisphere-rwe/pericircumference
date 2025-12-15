@@ -1,0 +1,247 @@
+---
+title: "Perisphere Template: Results Report"
+subtitle: "Start here when making deliverables with html"
+author: "[Byron C. Jaeger, PhD](https://www.byronjaeger.com/)"
+date: "Document created on `r format(Sys.time(), '%B %d, %Y')`" 
+bibliography: report/refs.bib
+csl: report/refs.csl
+always_allow_html: true
+format: 
+  html:
+    embed-resources: true
+    toc: true
+    toc-location: body
+    css: report/perisphere-report.css
+    include-in-header: report/toc-button.html
+    toc-title: "Contents"
+    toc-floating: false
+    number-sections: false
+    smooth-scroll: true
+    theme: flatly
+    code-fold: true
+    code-tools: true
+    highlight-style: github
+    df-print: paged
+    mainfont: Arial
+    fontsize: 11pt
+---
+
+```{r setup-knitr, include=FALSE}
+
+knitr::opts_chunk$set(
+  echo = FALSE,    # don't show code blocks
+  message = FALSE, # don't print messages to the doc
+  warning = FALSE, # don't print warnings to the doc
+  dpi = 300,       # higher dpi => higher render time 
+  fig.width = 6,   # default figure width in inches
+  fig.height = 4   # default figure height in inches
+)
+
+# Hello! This is the template html document for Perisphere reports.
+# There are several code chunks used to set up the format of the
+# document below. You don't have to modify those unless you want 
+# to change the format of your output. 
+
+```
+
+```{r setup-pkgs}
+
+# packages are usually handled by packages.R (in main directory).
+# When tar_make() is run, it loads everything in packages.R.
+# Assuming this document is in the list of targets (see ?tar_render),
+# you won't need to include the library calls below.
+# however, the template includes packages in its initial form
+# so that you can knit the document without having to run tar_make()
+
+# standards for word docs
+library(officer)
+library(flextable)
+
+# specify a rounding specification 
+library(table.glue)
+
+# general purpose
+library(tidyverse)
+library(pericircle)
+
+# table 1
+library(gtsummary)
+
+```
+
+```{r setup-figures}
+
+theme_set(
+  new = theme_bw() + 
+    theme(panel.grid = element_blank(),
+          text = element_text(size = 12))
+)
+
+```
+
+
+```{r setup-targets}
+
+withr::with_dir(
+  new = here::here(),
+  code = {
+    targets::tar_load(names = c(data, meta, stats))
+  }
+)
+
+```
+
+```{r setup-dictionary}
+
+# As the default dictionary, meta is applied to translate_ functions without
+# needing to be explicitly supplied in the dictionary argument.
+set_default_dictionary(meta)
+
+```
+
+```{r setup-formatters}
+
+# make a short name for table.glue::table_value - this makes
+# the inline reporting of results less complicated to read.
+tv <- table.glue::table_value
+tg <- table.glue::table_glue
+
+r_version <- tg("{version$major}.{version$minor}")
+
+```
+
+```{r setup-tables}
+
+# abbreviation management
+
+abbrvs <- list(
+  CI   = 'confidence interval',
+  SD   = 'standard deviation',
+  IQR  = 'interquartile range',
+  EHR  = 'electronic health records',
+  CVD  = 'cardiovascular disease'
+)
+
+abbrvs_paste <- function(strings){
+  
+  front <- 'Abbreviations'
+  
+  matter <- glue::glue_collapse(strings, sep = '; ', last = '; and ')
+  
+  paste(front, matter, sep = ': ')
+  
+}
+
+abbrvs_write <- function(abbr){
+  
+  sorted <- abbr[sort(names(abbr))]
+  
+  strings <- map2_chr(names(sorted), sorted, paste, sep = ' = ')
+  
+  abbrvs_paste(strings)
+  
+}
+
+
+```
+
+
+Essentials for writing text are shown here. Demonstrations include creating a section and subsection, writing items in a bulleted list, citing items that are defined in `refs.bib`, and inserting R objects into the text.
+
+# Section
+
+A bulleted list:
+
+- Results were produced with R version `r r_version`.[@r_language]
+
+- Here's how to cite two or more things.[@orsf_aoas; @aorsf_joss; @aorsf_jcgs]
+
+## Subsection
+
+Here's how to put some results into the text: A total of `r tv(stats$.overall$nobs)` were included in the current analysis. The mean bill length was `r tv(stats$.overall$mean_bill_length)`. The mean (standard deviation) body mass was `r with(stats$.overall, tg("{mean_mass} ({sd_mass})"))`
+
+# References
+
+In case they are needed.
+
+<div id="refs"></div>
+
+
+
+# Tables
+
+A convention worth following is to make each table a sub section. This makes the table easier to find from the table of contents and also from the built-in Rstudio navigator.
+
+
+
+
+
+## Table 1: Penguin characteristics
+
+```{r}
+
+footer_tbl_val <- "Table values are n (%) or median (25th, 75th percentile)"
+
+data %>% 
+  translate_data(meta, units = 'descriptive') %>% 
+  tbl_summary(by = 'island', missing = 'no') %>% 
+  modify_footnote(c(all_stat_cols()) ~ NA) %>% 
+  as_flex_table() %>% 
+  theme_box() %>% 
+  add_footer_lines(footer_tbl_val) %>% 
+  align(j = c(2,3,4), align = 'center', part = 'all')
+
+```
+
+
+
+## Table 2: A more customized table
+
+```{r}
+
+data %>% 
+  group_by(species) %>% 
+  slice(1:3) %>% 
+  select(-body_mass_g, -sex, -year) %>% 
+  mutate(across(where(is.numeric), table_value)) %>% 
+  as_grouped_data(groups = 'species') %>% 
+  # infuse after as_grouped_data, b/c as_grouped_data can
+  # wipe away attributes, which will delete your labels.
+  translate_data(meta, units = 'descriptive') %>% 
+  as_flextable(hide_grouplabel = TRUE) %>% 
+  add_header_row(values = c(" ", " Penguin things"),
+                 colwidths = c(1, 3)) %>% 
+  bg(i = ~!is.na(species), bg = 'grey90') %>% 
+  width(width = 1.5) %>% 
+  width(j = 1, width = 2) %>% 
+  align(part = 'all', j = c(2,3,4), align = 'center') %>% 
+  footnote(i = 2, j = 2, 
+           part = 'header',
+           value = as_paragraph("Chinstraps boast the highest average bill length."),
+           ref_symbols = '1') %>% 
+  footnote(i = 1, j = 1, 
+           part = 'body',
+           value = as_paragraph('Adelies know they are a crowd favorite'), 
+           ref_symbols = '2') %>% 
+  add_footer_lines(values = abbrvs_write(abbrvs[c('CI', 'EHR', 'SD')])) %>% 
+  add_footer_lines(values = "none of those abbreviations are in the table but they demonstrate how to include abbreviations using my helper functions")
+
+```
+
+# Figures
+
+The default figure margins are set in the `setup-knitr`. You can change those to your preference by either modifying the call to `knitr::opt_chunk$set()` or by setting `fig.width` and `fig.height` in the code chunk that prints the figure.
+
+## Figure 1: Penguin dimensions (normal version)
+
+```{r}
+
+fig <- ggplot(data = data) + 
+  aes(x = bill_length_mm, y = bill_depth_mm, color = species) + 
+  geom_point()
+
+fig
+
+```
+
+There is a `theme_set()` command at the beginning of the document that sets our preferred `ggplot` theme. It aims to use the same font family and font size in the plots as is used in the text. I recommend changing the call to `theme_set()` if you want a different style - it's less redundant than changing each individual figure. However, if you want to just lightly modify the theme for a few specific plots, you can use the `theme()` function to add your flair to them. 

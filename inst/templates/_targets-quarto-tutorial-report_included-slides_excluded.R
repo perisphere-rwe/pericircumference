@@ -1,3 +1,4 @@
+
 source("packages.R")
 source("conflicts.R")
 
@@ -9,17 +10,17 @@ tar_option_set(
   controller = crew_controller_local(workers = 3)
 )
 
-results_version_major <- 1
-results_version_minor <- 0
+results_version_major <- 0
+results_version_minor <- 1
 
-if(!dir.exists(glue("doc/results-v{results_version_major}"))){
-  dir.create(glue("doc/results-v{results_version_major}"))
-}
-
+create_output_directories(results_version_major)
 
 tar_plan(
+  # data ----
 
   data = palmerpenguins::penguins,
+
+  # meta ----
 
   meta = as_data_dictionary(data) %>%
     set_labels(species = "Species",
@@ -39,6 +40,8 @@ tar_plan(
     set_divby_modeling(bill_length_mm = 5,
                        bill_depth_mm = 5),
 
+  # stats ----
+
   tar_target(stats, command = {
 
     data %>%
@@ -55,20 +58,40 @@ tar_plan(
                             nobs)) %>%
       # only needed if we used >= 2 group variables
       select(-.group_variable) %>%
-      as_inline(tbl_variables = c('.group_level', 'name'),
-                tbl_values = 'value')
+      as_inline(tbl_variables = c(".group_level", "name"),
+                tbl_values = "value")
 
   }),
 
-  tar_render(
-    doc_results,
-    path = here::here("doc/results.Rmd"),
-    output_file = paste0("results", "-v", results_version_major, "/",
-                         "results-", basename(here()),
-                         "-v", results_version_major,
-                         "-",  results_version_minor,
-                         ".docx")
-  )
+
+  tar_target(report_file, "report.qmd", format = "file"),
+
+  tar_target(report, command = {
+
+    output_file <- paste0("report-", basename(here()),
+                          "-v", results_version_major,
+                          "-",  results_version_minor,
+                          ".html")
+
+    output_dir <- paste0("report", "-v", results_version_major)
+
+    quarto_render(input = report_file, output_file = output_file)
+
+    file_moved <- file.copy(from = output_file,
+                            to = file.path("report", output_dir, output_file),
+                            overwrite = TRUE)
+
+    if(file_moved){
+      file.remove(output_file)
+    } else {
+      stop(
+        "could not copy report output. Check report target in _targets.R"
+      )
+    }
+
+    NULL
+
+  })
 
 ) %>%
   tar_hook_before(

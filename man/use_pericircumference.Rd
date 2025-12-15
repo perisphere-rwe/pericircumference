@@ -4,31 +4,39 @@
 \alias{use_pericircumference}
 \title{Initialize pericircumference workflow}
 \usage{
-use_pericircumference(results_format = "word", include_tutorials = TRUE)
+use_pericircumference(
+  doc_format = "office",
+  include_tutorials = TRUE,
+  include_report = TRUE,
+  include_slides = TRUE
+)
 }
 \arguments{
-\item{results_format}{a character value indicating the format of the
-results document. Valid options are
+\item{doc_format}{a character value indicating the format of project output
+documents. Valid options are
 \itemize{
-\item "word": use \code{officedown::rdocx_document} results document
+\item "office": uses \code{officedown} to provide .docx and .pptx outputs.
+\item "quarto": uses \code{quarto} to provide .html outputs
 }}
 
 \item{include_tutorials}{a logical value indicating whether to use file
-templates for \verb{_targets.R} and \code{doc/results.Rmd}. The tutorial versions
-contain illustrations of targets and tools inside of the results document
-that should be helpful for newer users. The blank versions (i.e., the
-ones you get with \code{include_tutorials = FALSE}) should be more helpful
-for users who are familiar with the tools and just want to get files.}
+templates for \verb{_targets.R} and related files. The tutorial versions contain
+illustrations of targets and tools inside of the results document that
+should be helpful for newer users. The blank versions (i.e., the ones you
+get with \code{include_tutorials = FALSE}) should be more helpful for users who
+are familiar with the tools and just want to get files.}
+
+\item{include_slides}{a logical value indicating whether to include template
+documents required for presenting results in slide format}
 }
 \value{
 Nothing. Modifies your workspace.
 }
 \description{
-Creates files and directories according to the Perisphere template.
-The setup is designed to generate tables and figures in the targets
-pipeline, then load those objects into a results document. The results
-document itself goes through iterations designated by versions. This may
-seem unnecessary when using GitHub to handle version control, but it is
-often helpful to keep versions of old results documents in a space that
-is easy to access.
+Creates files and directories according to the Perisphere template. The setup
+is designed to generate tables and figures in the targets pipeline, then load
+those objects into a results document. The results document itself goes
+through iterations designated by versions. This may seem unnecessary when
+using GitHub to handle version control, but it is often helpful to keep
+versions of old results documents in a space that is easy to access.
 }

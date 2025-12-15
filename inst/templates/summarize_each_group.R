@@ -2,7 +2,7 @@
 #'
 #'  The extensions are:
 #'
-#'  1. An overall result is always included.
+#'  1. An overall result is included by ddefault.
 #'  2. Multiple groups can be summarized over.
 #'
 #' either pass a grouped data frame or provide `groups` input,

@@ -8,7 +8,7 @@ csl: refs.csl
 always_allow_html: true
 output: 
   officedown::rdocx_document:
-    reference_docx: style_arial.docx
+    reference_docx: perisphere_template.docx
     keep_md: true
     toc: true
     toc_depth: 2
@@ -39,9 +39,7 @@ knitr::opts_chunk$set(
 # Assuming this document is in the list of targets (see ?tar_render),
 # you won't need to include the library calls below.
 # however, the template includes packages in its initial form
-# so that you can knit the document without having to run tar_make().
-# The library calls can safely be removed once the required packages
-# are in packages.R and this doc is part of the targets pipeline.
+# so that you can knit the document without having to run tar_make()
 
 # standards for word docs
 library(officer)
@@ -52,6 +50,7 @@ library(table.glue)
 
 # general purpose
 library(tidyverse)
+library(pericircle)
 
 # table 1
 library(gtsummary)
@@ -189,18 +188,12 @@ r_version <- tg("{version$major}.{version$minor}")
 
 ```{r setup-tables}
 
-# Footnotes should be wrapped in `as_paragraph`:
-
-ckd_defn <- as_paragraph("Chronic Kidney Disease was defined by an estimated glomerular filtration rate <60 ml/min/1.73 m", as_sup(2L), " based on the 2021 CKD-EPI creatinine equation.")
-
 # abbreviation management
 
 abbrvs <- list(
   CI   = 'confidence interval',
-  FI   = 'frailty index',
   SD   = 'standard deviation',
   IQR  = 'interquartile range',
-  MoCA = 'Montreal cognitive assessment',
   EHR  = 'electronic health records',
   CVD  = 'cardiovascular disease'
 )
@@ -221,7 +214,7 @@ abbrvs_write <- function(abbr){
   
   strings <- map2_chr(names(sorted), sorted, paste, sep = ' = ')
   
-  as_paragraph(abbrvs_paste(strings))
+  abbrvs_paste(strings)
   
 }
 
@@ -254,7 +247,7 @@ In case they are needed.
 
 # Tables
 
-A convention worth following is to make each table a sub section. This makes the table easier to find from the table of contents and also from the built-in Rstudio navigator. Another good convention is to start a new page for each table (use the `\newpage` command)
+A good convention is to make each table a sub section. This makes the table easier to find from the table of contents and also from the built-in Rstudio navigator. Another good convention is to start a new page for each table (use the `\newpage` command)
 
 \newpage
 
@@ -346,7 +339,6 @@ fig
 There is a `theme_set()` command at the beginning of the document that sets our preferred `ggplot` theme. It aims to use the same font family and font size in the plots as is used in the text. I recommend changing the `ggplot` theming if you decide to use a different style for the word doc. If you want to just lightly modify the theme for specific plots, you can use the `theme()` function to add your flair. 
 
 `r page_long_above()`
-
 
 ## Figure 2: Penguin dimensions (wide version)
 

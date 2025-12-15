@@ -1,29 +1,14 @@
 ---
-title: "Perisphere Template: Results Report"
-subtitle: "Start here when making deliverables with html"
-author: "[Byron C. Jaeger, PhD](https://www.byronjaeger.com/)"
-date: "Document created on `r format(Sys.time(), '%B %d, %Y')`" 
-bibliography: doc/refs.bib
-csl: doc/refs.csl
-always_allow_html: true
-format: 
-  html:
+title: "Perisphere RWE Template"
+format:
+  revealjs:
+    theme: simple
+    css: slides/perisphere-slides.css
+    bibliography: slides/refs.bib
+    csl: slides/refs.csl
+    slide-number: true
+    logo: "slides/perisphere-logo.png"
     embed-resources: true
-    toc: true
-    toc-location: body
-    css: doc/styles.css
-    include-in-header: doc/toc-button.html
-    toc-title: "Contents"
-    toc-floating: false
-    number-sections: false
-    smooth-scroll: true
-    theme: flatly
-    code-fold: true
-    code-tools: true
-    highlight-style: github
-    df-print: paged
-    mainfont: Arial
-    fontsize: 11pt
 ---
 
 ```{r setup-knitr, include=FALSE}
@@ -33,11 +18,11 @@ knitr::opts_chunk$set(
   message = FALSE, # don't print messages to the doc
   warning = FALSE, # don't print warnings to the doc
   dpi = 300,       # higher dpi => higher render time 
-  fig.width = 6,   # default figure width in inches
-  fig.height = 4   # default figure height in inches
+  fig.height = 6,  # default height is 6 inches
+  fig.width = 10   # default width is 10 inches 
 )
 
-# Hello! This is the template html document for Perisphere reports.
+# Hello! This is the template word document for Perisphere reports.
 # There are several code chunks used to set up the format of the
 # document below. You don't have to modify those unless you want 
 # to change the format of your output. 
@@ -52,8 +37,6 @@ knitr::opts_chunk$set(
 # you won't need to include the library calls below.
 # however, the template includes packages in its initial form
 # so that you can knit the document without having to run tar_make().
-# The library calls can safely be removed once the required packages
-# are in packages.R and this doc is part of the targets pipeline.
 
 # standards for word docs
 library(officer)
@@ -64,23 +47,12 @@ library(table.glue)
 
 # general purpose
 library(tidyverse)
+library(pericircle)
 
 # table 1
 library(gtsummary)
-library(pericircle)
 
 ```
-
-```{r setup-figures}
-
-theme_set(
-  new = theme_bw() + 
-    theme(panel.grid = element_blank(),
-          text = element_text(size = 12))
-)
-
-```
-
 
 ```{r setup-targets}
 
@@ -114,18 +86,12 @@ r_version <- tg("{version$major}.{version$minor}")
 
 ```{r setup-tables}
 
-# Footnotes should be wrapped in `as_paragraph`:
-
-ckd_defn <- "Chronic Kidney Disease was defined by an estimated glomerular filtration rate <60 ml/min/1.73 m<sup>2</sup> based on the 2021 CKD-EPI creatinine equation."
-
 # abbreviation management
 
 abbrvs <- list(
   CI   = 'confidence interval',
-  FI   = 'frailty index',
   SD   = 'standard deviation',
   IQR  = 'interquartile range',
-  MoCA = 'Montreal cognitive assessment',
   EHR  = 'electronic health records',
   CVD  = 'cardiovascular disease'
 )
@@ -240,7 +206,7 @@ data %>%
 
 The default figure margins are set in the `setup-knitr`. You can change those to your preference by either modifying the call to `knitr::opt_chunk$set()` or by setting `fig.width` and `fig.height` in the code chunk that prints the figure.
 
-## Figure 1: Penguin dimensions (normal version)
+## Figure 1: Penguin dimensions
 
 ```{r}
 
@@ -252,4 +218,3 @@ fig
 
 ```
 
-There is a `theme_set()` command at the beginning of the document that sets our preferred `ggplot` theme. It aims to use the same font family and font size in the plots as is used in the text. I recommend changing the call to `theme_set()` if you want a different style - it's less redundant than changing each individual figure. However, if you want to just lightly modify the theme for a few specific plots, you can use the `theme()` function to add your flair to them. 

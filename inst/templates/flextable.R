@@ -1,14 +1,16 @@
 
 
 flextable_polish <- function(ft,
-                             labels,
                              font_name = "Arial",
                              font_size = 11,
                              header_text = NULL,
-                             footnotes = NULL) {
+                             footer_text = NULL) {
 
-  if(!is.null(header_text)){ ft <- ft %>% add_header_lines(header_text) }
-  if(!is.null(footnotes))  { ft <- ft %>% add_footer_lines(footnotes)   }
+  if(!is.null(header_text))
+    ft <- ft %>% add_header_lines(header_text)
+
+  if(!is.null(footer_text))
+    ft <- ft %>% add_footer_lines(footer_text)
 
   ft %>%
     bold(part = 'header') %>%
@@ -17,6 +19,22 @@ flextable_polish <- function(ft,
     theme_box() %>%
     align(align = "center", part = "all") %>%
     align(j = 1, align = "left", part = "all")
+
+}
+
+flextable_polish_ppt <- function(ft,
+                                 font_name = "Arial",
+                                 font_size = 11,
+                                 header_text = NULL,
+                                 footer_text = NULL){
+
+  ft %>%
+    color(color = "white", part = "header") %>%
+    bg(bg = "#0070C0", part = "header") %>%
+    flextable_polish(font_name = font_name,
+                     font_size = font_size,
+                     header_text = header_text,
+                     footer_text = footer_text)
 
 }
 
