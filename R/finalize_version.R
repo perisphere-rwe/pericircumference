@@ -71,11 +71,11 @@ finalize_version <- function(major, minor){
   changes <- read_changelog_latest()
 
   message("Version ", current_version, " has been finalized.\n",
-          " - The changes in your changelog are copied on your clipboard (use ctrl+v or cmd+v to paste them) .\n",
+          " - The changes in your changelog are written below .\n",
           " - Remember to update `version_major` and/or `version_minor` in your _targets.R file.\n",
           " - Remember to make a git commit (if feasible) using the commit message 'finalize version ", current_version, "'")
 
-  clipr::write_clip(c("Changes in this update:", changes))
+  message("\nChanges in this update:\n", paste(changes, collapse = '\n'))
 
 }
 
