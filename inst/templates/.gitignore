@@ -5,6 +5,9 @@
 # Session Data files
 .RData
 
+# Data files used in this project
+data/
+
 # Example code in package build process
 *-Ex.R
 
@@ -37,13 +40,14 @@ _targets/
 # renv via capsule
 renv/library
 
-# old code, possible it contains passwords
-R-legacy/
-
 # intermediate outputs
 .DS_Store
 .quarto
 
-# deliverables
-doc/results-*
-doc/*.md
+# reports (the code is not ignored but outputs are)
+report/report-*
+report/*.md
+
+# slides (the code is not ignored but outputs are)
+slides/slides-*
+slides/*.md

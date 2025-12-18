@@ -10,10 +10,12 @@ tar_option_set(
   controller = crew_controller_local(workers = 3)
 )
 
-results_version_major <- 0
-results_version_minor <- 1
+version_major <- 0
+version_minor <- 1
 
-create_output_directories(results_version_major)
+assert_valid_version(version_major, version_minor)
+
+create_output_directories(version_major)
 
 tar_plan(
   # data ----
@@ -69,11 +71,11 @@ tar_plan(
   tar_target(report, command = {
 
     output_file <- paste0("report-", basename(here()),
-                          "-v", results_version_major,
-                          "-",  results_version_minor,
+                          "-v", version_major,
+                          "-",  version_minor,
                           ".html")
 
-    output_dir <- paste0("report", "-v", results_version_major)
+    output_dir <- paste0("report", "-v", version_major)
 
     quarto_render(input = report_file, output_file = output_file)
 
@@ -98,11 +100,11 @@ tar_plan(
   tar_target(slides, command = {
 
     output_file <- paste0("slides-", basename(here()),
-                          "-v", results_version_major,
-                          "-",  results_version_minor,
+                          "-v", version_major,
+                          "-",  version_minor,
                           ".html")
 
-    output_dir <- paste0("slides", "-v", results_version_major)
+    output_dir <- paste0("slides", "-v", version_major)
 
     quarto_render(input = slides_file, output_file = output_file)
 

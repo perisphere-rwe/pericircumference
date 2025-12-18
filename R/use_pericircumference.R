@@ -38,6 +38,15 @@ use_pericircumference <- function(doc_format = "office",
   report_type <- ifelse(include_report, 'report_included', 'report_excluded')
   slides_type <- ifelse(include_slides, 'slides_included', 'slides_excluded')
 
+  if(here::here() != getwd()){
+    stop("`use_perircumference()` requires the current working directory",
+         " be the main directory of the current project.\n",
+         " - Current working directory: ", getwd(), "\n",
+         " - Main directory of current project: ", here::here())
+  }
+
+  readr::write_rds(x = '0.0', file = 'version.rds')
+
   targets_fname <- glue::glue(
     "_targets-{doc_format}-{tutorial_type}-{report_type}-{slides_type}.R"
   )

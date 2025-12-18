@@ -25,6 +25,42 @@ A perisphere project manager, `pericircumference` starts new projects with our s
 You can install the development version of pericircumference like so:
 
 ``` r
-renv::install("bcjaeger/pericircumference")
+renv::install("perisphere-rwe/pericircumference")
 ```
 
+## Purpose
+
+`pericircumference` populates working directories with relevant files to manage your project using the `targets` package. It's intended purpose is to allow new projects to be initiated quickly and safely (e.g., without forgetting to write something important in `.gitignore`).
+
+## File contents
+
+Running `use_pericircumference()` in the R console will populate your current working directory with the following files and directories:
+
+- `_targets.R`: this is the file used to coordinate targets
+- `packages.R`: all `library` calls go here
+- `conflicts.R`: uses `conflicted` package to manage name space
+- `changelog.md`: describes changes implemented in each update (more on this below)
+- `.gitignore`: manages which files and directories are ignored by git
+- the `R` directory:
+    + `R/create_output_directories.R`: helper function used for updates (more on this below)
+    + `R/flextable`: helper functions for `flextable` objects
+    + `R/summarize_each_group`: wrapper around `dplyr::summarize`, allows results to be summarized by group and include an overall summary as well.
+- the `report` directory:
+    + `report.Rmd`: generates the project report (can be MS word or html)
+    + miscellaneous template files for styling the report
+- the `slides` directory:
+    + `slides.Rmd`: generates the project slides (can be MS word or html)
+    + miscellaneous template files for styling the report
+    
+## Project management
+
+This section caters heavily to Perisphere Real World Evidence and our own approach to managing projects.
+
+**Updates**: As the project matures, we periodically send results to our team in a report, or present them using slides. We define these events as project updates. To make sure there is a clear track record of changes between each project update, we follow a standard procedure:
+
+1. All projects start at version 0.1
+1. The lead analyst writes changes in the changelog as they implement them.
+1. When it's time to share the changes, the analyst runs `finalize_version()`, which will do the following:
+    + pull the text from the changelog file
+
+## Using git

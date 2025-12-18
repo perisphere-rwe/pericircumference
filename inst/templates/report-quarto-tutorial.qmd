@@ -119,7 +119,8 @@ abbrvs <- list(
   SD   = 'standard deviation',
   IQR  = 'interquartile range',
   EHR  = 'electronic health records',
-  CVD  = 'cardiovascular disease'
+  CVD  = 'cardiovascular disease',
+  mm   = 'millimeters'
 )
 
 abbrvs_paste <- function(strings){
@@ -209,22 +210,21 @@ data %>%
   # wipe away attributes, which will delete your labels.
   translate_data(meta, units = 'descriptive') %>% 
   as_flextable(hide_grouplabel = TRUE) %>% 
-  add_header_row(values = c(" ", " Penguin things"),
+  padding(part = 'body', j = 1, i = ~ is.na(species),
+          padding.left = 10) %>% 
+  add_header_row(values = c(" ", " Penguin characteristics"),
                  colwidths = c(1, 3)) %>% 
-  bg(i = ~!is.na(species), bg = 'grey90') %>% 
-  width(width = 1.5) %>% 
-  width(j = 1, width = 2) %>% 
-  align(part = 'all', j = c(2,3,4), align = 'center') %>% 
   footnote(i = 2, j = 2, 
            part = 'header',
-           value = as_paragraph("Chinstraps boast the highest average bill length."),
+           value = as_paragraph("Bill length is measured using a ruler"),
            ref_symbols = '1') %>% 
   footnote(i = 1, j = 1, 
            part = 'body',
            value = as_paragraph('Adelies know they are a crowd favorite'), 
            ref_symbols = '2') %>% 
-  add_footer_lines(values = abbrvs_write(abbrvs[c('CI', 'EHR', 'SD')])) %>% 
-  add_footer_lines(values = "none of those abbreviations are in the table but they demonstrate how to include abbreviations using my helper functions")
+  theme_box() %>% 
+  flextable_autofit(width_max = 5) %>% 
+  flextable_polish_ppt(footer_text = abbrvs_write(abbrvs['mm']))
 
 ```
 
@@ -232,7 +232,7 @@ data %>%
 
 The default figure margins are set in the `setup-knitr`. You can change those to your preference by either modifying the call to `knitr::opt_chunk$set()` or by setting `fig.width` and `fig.height` in the code chunk that prints the figure.
 
-## Figure 1: Penguin dimensions (normal version)
+## Figure 1: Penguin dimensions
 
 ```{r}
 
