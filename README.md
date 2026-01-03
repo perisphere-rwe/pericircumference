@@ -4,6 +4,7 @@
 # pericircumference
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 A perisphere project manager, `pericircumference` starts new projects
@@ -14,5 +15,92 @@ with our standard workflow
 You can install the development version of pericircumference like so:
 
 ``` r
-renv::install("bcjaeger/pericircumference")
+renv::install("perisphere-rwe/pericircumference")
 ```
+
+## Purpose
+
+`pericircumference` populates working directories with relevant files to
+manage your project using the `targets` package. It’s intended purpose
+is to allow new projects to be initiated quickly and safely (e.g.,
+without forgetting to write something important in `.gitignore`).
+
+## File contents
+
+Running `use_pericircumference()` in the R console will populate your
+current working directory with the following files and directories:
+
+- `_targets.R`: this is the file used to coordinate targets
+- `packages.R`: all `library` calls go here
+- `conflicts.R`: uses `conflicted` package to manage name space
+- `changelog.md`: describes changes implemented in each update (more on
+  this below)
+- `.gitignore`: manages which files and directories are ignored by git
+- the `R` directory:
+  - `R/create_output_directories.R`: helper function used for updates
+    (more on this below)
+  - `R/flextable`: helper functions for `flextable` objects
+  - `R/summarize_each_group`: wrapper around `dplyr::summarize`, allows
+    results to be summarized by group and include an overall summary as
+    well.
+- the `report` directory:
+  - `report.Rmd`: generates the project report (can be MS word or html)
+  - miscellaneous template files for styling the report
+- the `slides` directory:
+  - `slides.Rmd`: generates the project slides (can be MS word or html)
+  - miscellaneous template files for styling the report
+
+## Project management
+
+This section caters heavily to Perisphere Real World Evidence and our
+own approach to managing projects.
+
+**Updates**: As the project matures, we periodically send results to our
+team in a report, or present them using slides. We define these events
+as project updates. To make sure there is a clear track record of
+changes between each project update, we follow a standard procedure:
+
+1.  All projects start at version 0.1.
+
+    - This version is considered complete when we are ready to send the
+      first draft of results to a collaborator.
+
+2.  The lead analyst writes changes in the changelog **as they implement
+    them**.
+
+    - To make sure your collaborators are kept informed as a project
+      progresses, all meaningful updates to the project should be
+      communicated to them. So, proactively writing the changes in your
+      changelog saves you time because you won’t have to wrack your
+      brain in the future trying to remember what you did.
+
+3.  When it’s time to share the changes, the analyst runs
+    `finalize_version()`, which will do the following:
+
+    - pull the text from the changelog file and print it to your
+      console. You can copy/paste the text into an e-mail.
+
+    - reminds you to change `version_major` and/or `version_minor` in
+      your project so that the next time you make your targets, any
+      rendered markdown documents will be made with the new version name
+      (this ensures you won’t accidentally overwrite a previously
+      finalized report).
+
+    - reminds you to make a git commit signifying that this is the
+      commit where a given version was finalized. This makes it easy to
+      travel back to the project at any of the versions if needed.
+
+## Using git
+
+It is highly recommended to use `git` in projects that are created with
+`use_pericircumference`, but it isn’t a requirement. Personally, `git`
+is my preference for version control of code documents (e.g., files
+ending in `.R`, `.Rmd`, or `.qmd`), while
+`pericircumference::finalize_version()` is my preference for version
+control of documents created by code (e.g., files ending with `.docx`,
+`.html`, or `.pdf`). I prefer `pericircumference` for version control of
+output documents because it keeps all the previous versions accessible
+to you without having to navigate through commit history to fish them
+out, and in general using `git` to track `.docx` or other types of
+output files can be awkward because it is a little out of scope for
+`git` to do this.
