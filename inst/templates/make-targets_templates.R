@@ -176,7 +176,7 @@ library(glue)
 targets_guide <- expand_grid(
   output_format = c("office", "quarto"),
   content_type = c("blank", "tutorial"),
-  report_type = c("report_included"),
+  report_type = c("report_included", "report_excluded"),
   slides_type = c("slides_included", "slides_excluded")
 ) %>%
   mutate(
@@ -186,14 +186,22 @@ targets_guide <- expand_grid(
     ftext = pmap(
       .l = list(output_format, content_type, report_type, slides_type, fname),
       .f = function(output_format, content_type, report_type, slides_type, fname){
+
         cat(
           preamble, '\n',
           'tar_plan(',
           plan_content[[content_type]], '\n',
-          report[[output_format]],
+
+          if(report_type == 'report_included'){
+            report[[output_format]]
+          } else {
+            '\n'
+          },
+
 
           if(slides_type == 'slides_included'){
-            c(', \n', slides[[output_format]], '\n')
+            c(if(report_type=="report_included"){ ', \n'} else NULL,
+              slides[[output_format]], '\n')
           } else {
             '\n\n'
           },

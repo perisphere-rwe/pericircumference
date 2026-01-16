@@ -7,8 +7,10 @@
 
 <!-- badges: end -->
 
-A perisphere project manager, `pericircumference` starts new projects
-with our standard workflow
+A project manager designed for workflows that generate reports, slides,
+or any other type of markdown output, `pericircumference` starts new
+projects with a standard workflow designed for analysts in Perisphere
+Real World Evidence.
 
 ## Installation
 
@@ -52,27 +54,49 @@ current working directory with the following files and directories:
 
 ## Project management
 
-This section caters heavily to Perisphere Real World Evidence and our
-own approach to managing projects.
+This section focuses on Perisphere Real World Evidence and our own
+approach to managing projects.
 
 **Updates**: As the project matures, we periodically send results to our
 team in a report, or present them using slides. We define these events
 as project updates. To make sure there is a clear track record of
 changes between each project update, we follow a standard procedure:
 
-1.  All projects start at version 0.1.
+1.  All projects start at version 0.1, with version increments based on
+    minor and major updates.
 
-    - This version is considered complete when we are ready to send the
-      first draft of results to a collaborator.
+    - Version 0.1 is considered complete when we are ready to send the
+      first draft of results to a collaborator. It does not necessarily
+      need to contain all of the planned outputs.
+
+    - The first version of results that contains all planned outputs for
+      a project is called version 1.0.
+
+    - *Example*: if a project has three objectives, we may want to share
+      results with a collaborator after completing some results in
+      objective 1. We’d call this version 0.1. For version 0.2, we could
+      make minor updates to the results we shared in version 0.1 based
+      on feedback from our collaborators. For version 0.3, we could
+      complete results for objective 2. For version 0.4, we again make
+      minor updates to results in objectives 1 and 2 based on feedback
+      from our collaborators. Next, we complete results for objective 3,
+      and because this consitutes all the results in the current
+      project, we call this version 1.0. If we make minor updates to the
+      analysis after this, we increment the minor version (e.g., 1.1,
+      1.2, etc.). If we make a major update to the analysis after this
+      (e.g., adding a fourth objective), we increment the major version
+      (e.g., 2.0). This establishes a clear version history of results.
 
 2.  The lead analyst writes changes in the changelog **as they implement
     them**.
 
     - To make sure your collaborators are kept informed as a project
       progresses, all meaningful updates to the project should be
-      communicated to them. So, proactively writing the changes in your
-      changelog saves you time because you won’t have to wrack your
-      brain in the future trying to remember what you did.
+      communicated to them. Proactively writing the changes in your
+      changelog is the best way to do this. If you postpone summarizing
+      changes, you’ll spend extra time wracking your brain trying to
+      remember what you did and you might forget some important things
+      (ask me how I know).
 
 3.  When it’s time to share the changes, the analyst runs
     `finalize_version()`, which will do the following:
@@ -86,9 +110,9 @@ changes between each project update, we follow a standard procedure:
       (this ensures you won’t accidentally overwrite a previously
       finalized report).
 
-    - reminds you to make a git commit signifying that this is the
+    - reminds you to make a git commit indicating that this is the
       commit where a given version was finalized. This makes it easy to
-      travel back to the project at any of the versions if needed.
+      rewing the project to previous versions if needed.
 
 ## Using git
 
@@ -104,3 +128,16 @@ to you without having to navigate through commit history to fish them
 out, and in general using `git` to track `.docx` or other types of
 output files can be awkward because it is a little out of scope for
 `git` to do this.
+
+## Common errors
+
+1.  Error: pandoc document conversion failed with error 1. This error
+    occurs when you attempt to knit a word document while the document
+    is open on your computer. To fix, simply close the document and knit
+    again.
+
+2.  I made changes to `_targets.R` and then ran `tar_make()` but the
+    changes were not incorporated. If this happens to you, double check
+    to see if you saved your `_targets.R` file after making changes. The
+    same goes for making changes to other R files that `_targets.R`
+    uses.

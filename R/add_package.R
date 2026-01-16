@@ -30,7 +30,14 @@ add_package <- function(name, purpose = NULL){
 
   new_pkg <- glue::glue("library({name})")
 
-  if(new_pkg %in% packages){ return(NULL) }
+  if(new_pkg %in% packages){
+
+    message(cli::symbol$tick,
+            glue::glue("'{new_pkg}' is already in './packages.R'"))
+
+    return(NULL)
+
+  }
 
   if(!is.null(purpose)){
 
@@ -54,5 +61,10 @@ add_package <- function(name, purpose = NULL){
 
   message(cli::symbol$tick,
           glue::glue(" Writing '{new_pkg}' to './packages.R'"))
+
+  library(name, character.only = TRUE)  # attaches globally
+
+  message(cli::symbol$tick,
+          glue::glue(" '{name}' has been loaded into your R session"))
 
 }
