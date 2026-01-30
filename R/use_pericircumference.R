@@ -71,52 +71,52 @@ use_pericircumference <- function(doc_format = "office",
   if(include_slides) use_directory("slides")
 
   use_template(targets_fname,
-                        package = "pericircumference",
-                        save_as = "_targets.R")
+               package = "pericircumference",
+               save_as = "_targets.R")
 
   use_template("packages.R",   package = "pericircumference")
   use_template("conflicts.R",  package = "pericircumference")
   use_template(".gitignore",   package = "pericircumference")
 
   use_template("summarize_each_group.R",
-                        save_as = "R/summarize_each_group.R",
-                        package = "pericircumference")
+               save_as = "R/summarize_each_group.R",
+               package = "pericircumference")
 
   use_template("create_output_directories.R",
-                        save_as = "R/create_output_directories.R",
-                        package = "pericircumference")
+               save_as = "R/create_output_directories.R",
+               package = "pericircumference")
 
   use_template("flextable.R",
-                        save_as = "R/flextable.R",
-                        package = "pericircumference")
+               save_as = "R/flextable.R",
+               package = "pericircumference")
 
   if(include_report){
 
   use_template("refs.bib",
-                        save_as = "report/refs.bib",
-                        package = "pericircumference")
+               save_as = "report/refs.bib",
+               package = "pericircumference")
 
   use_template("refs.csl",
-                        save_as = "report/refs.csl",
-                        package = "pericircumference")
+               save_as = "report/refs.csl",
+               package = "pericircumference")
 
   }
 
   if(include_slides){
 
     use_template("refs.bib",
-                          save_as = "slides/refs.bib",
-                          package = "pericircumference")
+                 save_as = "slides/refs.bib",
+                 package = "pericircumference")
 
     use_template("refs.csl",
-                          save_as = "slides/refs.csl",
-                          package = "pericircumference")
+                 save_as = "slides/refs.csl",
+                 package = "pericircumference")
 
   }
 
   use_template("changelog.md",
-                        save_as = "changelog.md",
-                        package = "pericircumference")
+               save_as = "changelog.md",
+               package = "pericircumference")
 
   if(doc_format == 'quarto'){
 
@@ -127,19 +127,19 @@ use_pericircumference <- function(doc_format = "office",
     if(include_report){
 
       use_template("toc-button.html",
-                            save_as = "report/toc-button.html",
-                            package = "pericircumference")
+                   save_as = "report/toc-button.html",
+                   package = "pericircumference")
 
       use_template("perisphere-report.css",
-                            save_as = "report/perisphere-report.css",
-                            package = "pericircumference")
+                   save_as = "report/perisphere-report.css",
+                   package = "pericircumference")
     }
 
     if(include_slides){
 
       use_template("perisphere-slides.css",
-                            save_as = "slides/perisphere-slides.css",
-                            package = "pericircumference")
+                   save_as = "slides/perisphere-slides.css",
+                   package = "pericircumference")
 
       fpath_perisphere_logo <- system.file("templates",
                                            "perisphere-logo.png",
@@ -198,16 +198,16 @@ use_pericircumference <- function(doc_format = "office",
   if(include_report){
 
     use_template(report_fname,
-                          save_as = report,
-                          package = "pericircumference")
+                 save_as = report,
+                 package = "pericircumference")
 
   }
 
   if(include_slides){
 
     use_template(slides_fname,
-                          save_as = slides,
-                          package = 'pericircumference')
+                 save_as = slides,
+                 package = 'pericircumference')
 
   }
 
