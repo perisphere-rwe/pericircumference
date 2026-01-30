@@ -56,6 +56,8 @@ read_changelog_latest <- function(path = "changelog.md",
 #'   set of changes are copied to your clipboard so that you can paste them
 #'   into an e-mail where you share the results with collaborators.
 #'
+#' @importFrom readr write_rds
+#'
 #' @export
 #'
 finalize_version <- function(major, minor){
@@ -66,7 +68,7 @@ finalize_version <- function(major, minor){
                                           minor = minor,
                                           path = version_path)
 
-  readr::write_rds(current_version, version_path)
+  write_rds(current_version, version_path)
 
   changes <- read_changelog_latest()
 
@@ -97,6 +99,8 @@ finalize_version <- function(major, minor){
 #'
 #' @returns a string representing the current version
 #'
+#' @importFrom readr read_rds
+#'
 #' @export
 #'
 assert_valid_version <- function(major, minor, path = 'version.rds'){
@@ -107,7 +111,7 @@ assert_valid_version <- function(major, minor, path = 'version.rds'){
          call. = FALSE)
   }
 
-  previous_version <- readr::read_rds(path)
+  previous_version <- read_rds(path)
   current_version <- paste(major, minor, sep = '.')
 
   if(current_version <= previous_version){

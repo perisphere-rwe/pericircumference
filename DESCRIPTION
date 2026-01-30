@@ -13,6 +13,7 @@ RoxygenNote: 7.3.3
 Imports: 
     cli,
     glue,
+    here,
     readr,
     usethis
 URL: https://github.com/bcjaeger/pericircumference
