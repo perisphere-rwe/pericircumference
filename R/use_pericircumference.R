@@ -26,6 +26,11 @@
 #'
 #' @return Nothing. Modifies your workspace.
 #'
+#' @importFrom glue glue
+#' @importFrom here here
+#' @importFrom readr write_rds
+#' @importFrom usethis use_directory use_template
+#'
 #' @export
 #'
 use_pericircumference <- function(doc_format = "office",
@@ -38,103 +43,103 @@ use_pericircumference <- function(doc_format = "office",
   report_type <- ifelse(include_report, 'report_included', 'report_excluded')
   slides_type <- ifelse(include_slides, 'slides_included', 'slides_excluded')
 
-  if(here::here() != getwd()){
+  if(here() != getwd()){
     stop("`use_perircumference()` requires the current working directory",
          " be the main directory of the current project.\n",
          " - Current working directory: ", getwd(), "\n",
-         " - Main directory of current project: ", here::here())
+         " - Main directory of current project: ", here())
   }
 
-  readr::write_rds(x = '0.0', file = 'version.rds')
+  write_rds(x = '0.0', file = 'version.rds')
 
-  targets_fname <- glue::glue(
+  targets_fname <- glue(
     "_targets-{doc_format}-{tutorial_type}-{report_type}-{slides_type}.R"
   )
 
-  report_fname <- glue::glue(
+  report_fname <- glue(
     "report-{doc_format}-{tutorial_type}.{md_type}"
   )
 
-  slides_fname <- glue::glue(
+  slides_fname <- glue(
     "slides-{doc_format}-{tutorial_type}.{md_type}"
   )
 
-  usethis::use_directory("R")
+  use_directory("R")
 
-  if(include_report) usethis::use_directory("report")
+  if(include_report) use_directory("report")
 
-  if(include_slides) usethis::use_directory("slides")
+  if(include_slides) use_directory("slides")
 
-  usethis::use_template(targets_fname,
-                        package = "pericircumference",
-                        save_as = "_targets.R")
+  use_template(targets_fname,
+               package = "pericircumference",
+               save_as = "_targets.R")
 
-  usethis::use_template("packages.R",   package = "pericircumference")
-  usethis::use_template("conflicts.R",  package = "pericircumference")
-  usethis::use_template(".gitignore",   package = "pericircumference")
+  use_template("packages.R",   package = "pericircumference")
+  use_template("conflicts.R",  package = "pericircumference")
+  use_template(".gitignore",   package = "pericircumference")
 
-  usethis::use_template("summarize_each_group.R",
-                        save_as = "R/summarize_each_group.R",
-                        package = "pericircumference")
+  use_template("summarize_each_group.R",
+               save_as = "R/summarize_each_group.R",
+               package = "pericircumference")
 
-  usethis::use_template("create_output_directories.R",
-                        save_as = "R/create_output_directories.R",
-                        package = "pericircumference")
+  use_template("create_output_directories.R",
+               save_as = "R/create_output_directories.R",
+               package = "pericircumference")
 
-  usethis::use_template("flextable.R",
-                        save_as = "R/flextable.R",
-                        package = "pericircumference")
+  use_template("flextable.R",
+               save_as = "R/flextable.R",
+               package = "pericircumference")
 
   if(include_report){
 
-  usethis::use_template("refs.bib",
-                        save_as = "report/refs.bib",
-                        package = "pericircumference")
+  use_template("refs.bib",
+               save_as = "report/refs.bib",
+               package = "pericircumference")
 
-  usethis::use_template("refs.csl",
-                        save_as = "report/refs.csl",
-                        package = "pericircumference")
+  use_template("refs.csl",
+               save_as = "report/refs.csl",
+               package = "pericircumference")
 
   }
 
   if(include_slides){
 
-    usethis::use_template("refs.bib",
-                          save_as = "slides/refs.bib",
-                          package = "pericircumference")
+    use_template("refs.bib",
+                 save_as = "slides/refs.bib",
+                 package = "pericircumference")
 
-    usethis::use_template("refs.csl",
-                          save_as = "slides/refs.csl",
-                          package = "pericircumference")
+    use_template("refs.csl",
+                 save_as = "slides/refs.csl",
+                 package = "pericircumference")
 
   }
 
-  usethis::use_template("changelog.md",
-                        save_as = "changelog.md",
-                        package = "pericircumference")
+  use_template("changelog.md",
+               save_as = "changelog.md",
+               package = "pericircumference")
 
   if(doc_format == 'quarto'){
 
-    report <- glue::glue("report.{md_type}")
+    report <- glue("report.{md_type}")
 
-    slides <- glue::glue("slides.{md_type}")
+    slides <- glue("slides.{md_type}")
 
     if(include_report){
 
-      usethis::use_template("toc-button.html",
-                            save_as = "report/toc-button.html",
-                            package = "pericircumference")
+      use_template("toc-button.html",
+                   save_as = "report/toc-button.html",
+                   package = "pericircumference")
 
-      usethis::use_template("perisphere-report.css",
-                            save_as = "report/perisphere-report.css",
-                            package = "pericircumference")
+      use_template("perisphere-report.css",
+                   save_as = "report/perisphere-report.css",
+                   package = "pericircumference")
     }
 
     if(include_slides){
 
-      usethis::use_template("perisphere-slides.css",
-                            save_as = "slides/perisphere-slides.css",
-                            package = "pericircumference")
+      use_template("perisphere-slides.css",
+                   save_as = "slides/perisphere-slides.css",
+                   package = "pericircumference")
 
       fpath_perisphere_logo <- system.file("templates",
                                            "perisphere-logo.png",
@@ -156,9 +161,9 @@ use_pericircumference <- function(doc_format = "office",
 
   if(doc_format == 'office'){
 
-    report <- file.path('report', glue::glue("report.{md_type}"))
+    report <- file.path('report', glue("report.{md_type}"))
 
-    slides <- file.path('slides', glue::glue("slides.{md_type}"))
+    slides <- file.path('slides', glue("slides.{md_type}"))
 
     fpath_template_report <- system.file("templates",
                                          "perisphere-template.docx",
@@ -192,17 +197,17 @@ use_pericircumference <- function(doc_format = "office",
 
   if(include_report){
 
-    usethis::use_template(report_fname,
-                          save_as = report,
-                          package = "pericircumference")
+    use_template(report_fname,
+                 save_as = report,
+                 package = "pericircumference")
 
   }
 
   if(include_slides){
 
-    usethis::use_template(slides_fname,
-                          save_as = slides,
-                          package = 'pericircumference')
+    use_template(slides_fname,
+                 save_as = slides,
+                 package = 'pericircumference')
 
   }
 

@@ -15,6 +15,10 @@
 #' @return Nothing. Attempts to modify the packages.R file and prints a
 #'   summary message if the modification is successful.
 #'
+#' @importFrom cli symbol
+#' @importFrom glue glue
+#' @importFrom readr read_lines
+#'
 #' @export
 #'
 add_package <- function(name, purpose = NULL){
@@ -26,14 +30,14 @@ add_package <- function(name, purpose = NULL){
          call. = FALSE)
   }
 
-  packages <- readr::read_lines("./packages.R")
+  packages <- read_lines("./packages.R")
 
-  new_pkg <- glue::glue("library({name})")
+  new_pkg <- glue("library({name})")
 
   if(new_pkg %in% packages){
 
-    message(cli::symbol$tick,
-            glue::glue("'{new_pkg}' is already in './packages.R'"))
+    message(symbol$tick,
+            glue("'{new_pkg}' is already in './packages.R'"))
 
     return(NULL)
 
