@@ -3,6 +3,7 @@
 export(add_package)
 export(assert_valid_version)
 export(finalize_version)
+export(rewind_version)
 export(use_pericircumference)
 importFrom(cli,symbol)
 importFrom(glue,glue)
