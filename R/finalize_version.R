@@ -141,6 +141,8 @@ assert_valid_version <- function(major,
     length(minor) != 1L ||
     is.na(major) ||
     is.na(minor) ||
+    is.infinite(major) ||
+    is.infinite(minor) ||
     major %% 1 != 0 ||
     minor %% 1 != 0 ||
     major < 0 ||
