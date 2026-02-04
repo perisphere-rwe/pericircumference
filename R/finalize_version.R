@@ -1,8 +1,6 @@
 
-
-read_changelog_latest <- function(path = "changelog.md",
-                                  version_starts_with = "## Version") {
-
+read_changelog <- function(path = "changelog.md",
+                           version_starts_with = "## Version") {
 
   if (!file.exists(path)) {
 
@@ -27,6 +25,26 @@ read_changelog_latest <- function(path = "changelog.md",
     stop('No occurrences of "', version_starts_with,'" found in changelog.md',
          call. = FALSE)
   }
+
+  out <- list(
+    "lines" = lines,
+    "idx" = idx
+  )
+
+  return(out)
+}
+
+
+read_changelog_latest <- function(path = "changelog.md",
+                                  version_starts_with = "## Version") {
+
+  ls <- read_changelog(
+    path = path,
+    version_starts_with = version_starts_with
+  )
+
+  lines <- ls[["lines"]]
+  idx <- ls[["idx"]]
 
   if (length(idx) == 1) {
     return(lines[(idx + 1L):length(lines)])
@@ -136,7 +154,21 @@ assert_valid_version <- function(major,
   previous_version <- read_rds(path)
   current_version <- paste(major, minor, sep = '.')
 
-  if(!allow_previous){
+  if (allow_previous) {
+    # Check that the current version has been used before
+    ls <- read_changelog(
+      path = path
+    )
+
+    # Extract version numbers from the headers of the changelog
+    all_versions <- ls[["lines"]][ls[["idx"]]]
+    all_versions <- sub("## Version ", "", all_versions, fixed = TRUE)
+    all_versions <- gsub(" ", "", all_versions, fixed = TRUE)
+
+    if (!current_version %in% all_versions) {
+      stop("The version specified is not a current or prior version.")
+    }
+  } else {
     compare_versions(current_version, previous_version)
   }
 

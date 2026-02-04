@@ -25,5 +25,10 @@ rewind_version <- function(major,
 
   write_rds(current_version, path)
 
+  message(
+    "The version has been rewound to {current_version}. ",
+    "Please modify changelog.md accordingly."
+  )
+
   invisible(current_version)
 }
