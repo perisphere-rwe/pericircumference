@@ -15,6 +15,7 @@ Imports:
     glue,
     here,
     readr,
-    usethis
+    usethis,
+    here
 URL: https://github.com/bcjaeger/pericircumference
 BugReports: https://github.com/bcjaeger/pericircumference/issues

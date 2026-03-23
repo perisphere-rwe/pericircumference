@@ -26,8 +26,11 @@ should be helpful for newer users. The blank versions (i.e., the ones you
 get with \code{include_tutorials = FALSE}) should be more helpful for users who
 are familiar with the tools and just want to get files.}
 
+\item{include_report}{a logical value indicating whether to include template
+documents required for presenting results in a report.}
+
 \item{include_slides}{a logical value indicating whether to include template
-documents required for presenting results in slide format}
+documents required for presenting results in slides.}
 }
 \value{
 Nothing. Modifies your workspace.

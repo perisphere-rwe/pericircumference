@@ -14,6 +14,7 @@
 #'   - "office": uses `officedown` to provide .docx and .pptx outputs.
 #'   - "quarto": uses `quarto` to provide .html outputs
 #'
+#'
 #' @param include_tutorials a logical value indicating whether to use file
 #'   templates for `_targets.R` and related files. The tutorial versions contain
 #'   illustrations of targets and tools inside of the results document that
@@ -21,8 +22,11 @@
 #'   get with `include_tutorials = FALSE`) should be more helpful for users who
 #'   are familiar with the tools and just want to get files.
 #'
+#' @param include_report a logical value indicating whether to include template
+#'   documents required for presenting results in a report.
+#'
 #' @param include_slides a logical value indicating whether to include template
-#'   documents required for presenting results in slide format
+#'   documents required for presenting results in slides.
 #'
 #' @return Nothing. Modifies your workspace.
 #'
@@ -89,6 +93,10 @@ use_pericircumference <- function(doc_format = "office",
   use_template("flextable.R",
                save_as = "R/flextable.R",
                package = "pericircumference")
+
+  usethis::use_template("shift.R",
+                        save_as = "R/shift.R",
+                        package = "pericircumference")
 
   if(include_report){
 
