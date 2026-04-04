@@ -150,7 +150,7 @@ footer_tbl_val <- "Table values are n (%) or median (25th, 75th percentile)"
 
 data %>% 
   select(species, island, contains("length")) %>% 
-  translate_data(meta, units = 'descriptive') %>% 
+  translate_data(dictionary = meta, units = 'descriptive') %>% 
   tbl_summary(by = 'island', missing = 'no') %>% 
   modify_footnote(c(all_stat_cols()) ~ NA) %>% 
   as_flex_table() %>% 
@@ -170,9 +170,9 @@ data %>%
   select(-body_mass_g, -sex, -year) %>% 
   mutate(across(where(is.numeric), table_value)) %>% 
   as_grouped_data(groups = 'species') %>% 
-  # infuse after as_grouped_data, b/c as_grouped_data can
+  # translate after as_grouped_data, b/c as_grouped_data can
   # wipe away attributes, which will delete your labels.
-  translate_data(meta, units = 'descriptive') %>% 
+  translate_data(dictionary = meta, units = 'descriptive') %>% 
   as_flextable(hide_grouplabel = TRUE) %>% 
   padding(part = 'body', j = 1, i = ~ is.na(species),
           padding.left = 10) %>% 
