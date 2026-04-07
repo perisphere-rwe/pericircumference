@@ -453,13 +453,18 @@ little out of scope for `git` to do this.
 
 ## Common errors
 
-1.  Error: pandoc document conversion failed with error 1. This error
-    occurs when you attempt to knit a word document while the document
-    is open on your computer. To fix, simply close the document and knit
-    again.
+1.  **I ran `tar_make()` and got this error: pandoc document conversion
+    failed with error 1**. This error occurs when you attempt to knit a
+    word document while the document is open on your computer. To fix,
+    close the document and try running `tar_make()` again.
 
-2.  I made changes to `_targets.R` and then ran `tar_make()` but the
-    changes were not incorporated. If this happens to you, double check
-    to see if you saved your `_targets.R` file after making changes. The
-    same goes for making changes to other R files that `_targets.R`
-    uses.
+2.  **I ran `tar_make()` and got an error, but there is no error message
+    printed in my console**. This can happen when `crew` is used to run
+    `targets` pipelines. Run `tar_make(as_job = FALSE)` to prevent
+    `crew` from being used - this should make the error message print to
+    your console as usual.
+
+3.  **I made changes to `_targets.R` and then ran `tar_make()` but the
+    changes were not incorporated**. Double check to see if you saved
+    your `_targets.R` file after making changes. The same goes for
+    making changes to other R files that `_targets.R` uses.
