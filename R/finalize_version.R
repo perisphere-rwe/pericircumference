@@ -1,8 +1,6 @@
 
-
-read_changelog_latest <- function(path = "changelog.md",
-                                  version_starts_with = "## Version") {
-
+read_changelog <- function(path = "changelog.md",
+                           version_starts_with = "## Version") {
 
   if (!file.exists(path)) {
 
@@ -27,6 +25,26 @@ read_changelog_latest <- function(path = "changelog.md",
     stop('No occurrences of "', version_starts_with,'" found in changelog.md',
          call. = FALSE)
   }
+
+  out <- list(
+    "lines" = lines,
+    "idx" = idx
+  )
+
+  return(out)
+}
+
+
+read_changelog_latest <- function(path = "changelog.md",
+                                  version_starts_with = "## Version") {
+
+  ls <- read_changelog(
+    path = path,
+    version_starts_with = version_starts_with
+  )
+
+  lines <- ls[["lines"]]
+  idx <- ls[["idx"]]
 
   if (length(idx) == 1) {
     return(lines[(idx + 1L):length(lines)])
@@ -96,6 +114,8 @@ finalize_version <- function(major, minor){
 #' @inheritParams finalize_version
 #' @param path a string indicating where `version.rds` is stored. This
 #'   should *always* be stored in the project's main directory.
+#' @param allow_previous (logical) whether the current version can be the same
+#'   as or earlier than the version in "version.rds".
 #'
 #' @returns a string representing the current version
 #'
@@ -103,7 +123,10 @@ finalize_version <- function(major, minor){
 #'
 #' @export
 #'
-assert_valid_version <- function(major, minor, path = 'version.rds'){
+assert_valid_version <- function(major,
+                                 minor,
+                                 path = 'version.rds',
+                                 allow_previous = FALSE){
 
   if(!file.exists(path)){
     stop("version.rds file not found. This should not happen.",
@@ -111,16 +134,77 @@ assert_valid_version <- function(major, minor, path = 'version.rds'){
          call. = FALSE)
   }
 
+  invalid_versions <-
+    !is.vector(major, mode = "numeric") ||
+    !is.vector(minor, mode = "numeric") ||
+    length(major) != 1L ||
+    length(minor) != 1L ||
+    is.na(major) ||
+    is.na(minor) ||
+    is.infinite(major) ||
+    is.infinite(minor) ||
+    major %% 1 != 0 ||
+    minor %% 1 != 0 ||
+    major < 0 ||
+    minor < 0
+
+  if (invalid_versions) {
+    stop("major and minor must each be a single integer >= 0.",
+         call. = FALSE)
+  }
+
   previous_version <- read_rds(path)
   current_version <- paste(major, minor, sep = '.')
 
-  if(current_version <= previous_version){
+  if (allow_previous) {
+    # Check that the current version has been used before
+    ls <- read_changelog(
+      path = path
+    )
+
+    # Extract version numbers from the headers of the changelog
+    all_versions <- ls[["lines"]][ls[["idx"]]]
+    all_versions <- sub("## Version ", "", all_versions, fixed = TRUE)
+    all_versions <- gsub(" ", "", all_versions, fixed = TRUE)
+
+    if (!current_version %in% all_versions) {
+      stop("The version specified is not a current or prior version.")
+    }
+  } else {
+    compare_versions(current_version, previous_version)
+  }
+
+  invisible(current_version)
+
+}
+
+
+compare_versions <- function(current_version,
+                             previous_version) {
+  # Can not compare strings directly because "0.10" <= "0.9" is TRUE (incorrect)
+  version_list <- list(
+    "curr" = current_version,
+    "prev" = previous_version
+  )
+
+  version_list <- lapply(version_list, function(v) {
+    out <- as.integer(
+      strsplit(v, split = ".", fixed = TRUE)[[1L]]
+    )
+    names(out) <- c("major", "minor")
+
+    return(out)
+  })
+
+  v <- as.list(unlist(version_list))
+
+  throw_error <- (v$curr.major <= v$prev.major) &&
+    (v$curr.minor <= v$prev.minor)
+
+  if (throw_error) {
     stop("version ", current_version, " has already been finalized.",
          " Did you remember to update `version_major` or `version_minor`",
          " in your `_targets.R` file?",
          call. = FALSE)
   }
-
-  invisible(current_version)
-
 }

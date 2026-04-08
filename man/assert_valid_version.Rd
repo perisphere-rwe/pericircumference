@@ -4,7 +4,12 @@
 \alias{assert_valid_version}
 \title{Assert validity of the current project version}
 \usage{
-assert_valid_version(major, minor, path = "version.rds")
+assert_valid_version(
+  major,
+  minor,
+  path = "version.rds",
+  allow_previous = FALSE
+)
 }
 \arguments{
 \item{major}{(numeric) the current major version of your project}
@@ -13,6 +18,9 @@ assert_valid_version(major, minor, path = "version.rds")
 
 \item{path}{a string indicating where \code{version.rds} is stored. This
 should \emph{always} be stored in the project's main directory.}
+
+\item{allow_previous}{(logical) whether the current version can be the same
+as or earlier than the version in "version.rds".}
 }
 \value{
 a string representing the current version

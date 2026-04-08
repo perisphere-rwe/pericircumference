@@ -17,7 +17,7 @@
 #'
 #' @importFrom cli symbol
 #' @importFrom glue glue
-#' @importFrom readr read_lines
+#' @importFrom readr read_lines write_lines
 #'
 #' @export
 #'
@@ -61,14 +61,14 @@ add_package <- function(name, purpose = NULL){
 
   packages <- c(packages, purpose, new_pkg)
 
-  readr::write_lines(packages, "./packages.R")
+  write_lines(packages, "./packages.R")
 
-  message(cli::symbol$tick,
-          glue::glue(" Writing '{new_pkg}' to './packages.R'"))
+  message(symbol$tick,
+          glue(" Writing '{new_pkg}' to './packages.R'"))
 
   library(name, character.only = TRUE)  # attaches globally
 
-  message(cli::symbol$tick,
-          glue::glue(" '{name}' has been loaded into your R session"))
+  message(symbol$tick,
+          glue(" '{name}' has been loaded into your R session"))
 
 }
