@@ -8,7 +8,9 @@ use_pericircumference(
   doc_format = "office",
   include_tutorials = TRUE,
   include_report = TRUE,
-  include_slides = TRUE
+  include_slides = TRUE,
+  report_name = "report",
+  slides_name = "slides"
 )
 }
 \arguments{
@@ -31,6 +33,16 @@ documents required for presenting results in a report.}
 
 \item{include_slides}{a logical value indicating whether to include template
 documents required for presenting results in slides.}
+
+\item{report_name}{a character value giving the name used for the report
+directory and document file. Defaults to \code{"report"}, which produces a
+\verb{report/} directory containing \code{report.Rmd} (or \code{report.qmd}). Set to
+e.g. \code{"results"} to get \code{results/results.Rmd} instead.}
+
+\item{slides_name}{a character value giving the name used for the slides
+directory and document file. Defaults to \code{"slides"}, which produces a
+\verb{slides/} directory containing \code{slides.Rmd} (or \code{slides.qmd}). Set to
+e.g. \code{"presentation"} to get \code{presentation/presentation.Rmd} instead.}
 }
 \value{
 Nothing. Modifies your workspace.

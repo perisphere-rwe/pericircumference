@@ -1,7 +1,7 @@
 ---
-title: "Perisphere Template: Results Report"
+title: "{{{report_title}}}"
 subtitle: "Start here when making deliverables with MS Word"
-author: "[Byron C. Jaeger, PhD](https://www.byronjaeger.com/)"
+author: "{{{author}}}"
 date: "Document created on `r format(Sys.time(), '%B %d, %Y')`" 
 bibliography: refs.bib
 csl: refs.csl

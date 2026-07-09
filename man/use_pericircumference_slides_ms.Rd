@@ -14,4 +14,6 @@ A wrapper around \code{\link[=use_pericircumference]{use_pericircumference()}} f
 to quickly set up a project with PowerPoint slides and no report or
 tutorials. Equivalent to calling
 \code{use_pericircumference(doc_format = "office", include_tutorials = FALSE, include_report = FALSE, include_slides = TRUE)}.
+To use a custom directory/file name, call \code{\link[=use_pericircumference]{use_pericircumference()}} directly
+with the \code{slides_name} argument.
 }

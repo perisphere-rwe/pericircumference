@@ -1,7 +1,10 @@
 #' Add a package to packages.R
 #'
-#' @param name the name of the package
-#' @param purpose what's the purpose of the package being added?
+#' @param name the name of the package to add.
+#' @param purpose a character string describing why the package is needed.
+#'   Stored as a comment above the `library()` call. Optional but encouraged.
+#' @param path path to the packages file. Defaults to `"packages.R"` in the
+#'   current working directory.
 #'
 #' @details
 #' A purpose isn't necessary, but it can sometimes be helpful for you
@@ -11,64 +14,48 @@
 #' uses the `here` package to manage targets in R-markdown documents,
 #' that's a lot more informative.
 #'
-#'
-#' @return Nothing. Attempts to modify the packages.R file and prints a
-#'   summary message if the modification is successful.
+#' @return Nothing, invisibly.
 #'
 #' @importFrom cli symbol
 #' @importFrom glue glue
-#' @importFrom readr read_lines
+#' @importFrom readr read_lines write_lines
 #'
 #' @export
 #'
-add_package <- function(name, purpose = NULL){
+add_package <- function(name, purpose = NULL, path = "packages.R"){
 
-  if(!file.exists("./packages.R")){
-    stop("Create packages.R file before using `add_pkg()`.\n",
-         "- run pericircle::use_targets() to initialize project\n",
-         "- run add_pkg(\"foo\") to add an R package named foo",
-         call. = FALSE)
+  if (!file.exists(path)) {
+    stop(
+      "Could not find ", path, ".\n",
+      "- Run pericircumference::use_pericircumference() to initialize the project.\n",
+      "- Then run add_package(\"foo\") to add an R package named foo.",
+      call. = FALSE
+    )
   }
 
-  packages <- read_lines("./packages.R")
+  packages <- read_lines(path)
 
   new_pkg <- glue("library({name})")
 
-  if(new_pkg %in% packages){
-
-    message(symbol$tick,
-            glue("'{new_pkg}' is already in './packages.R'"))
-
-    return(NULL)
-
+  if (new_pkg %in% packages) {
+    message(symbol$tick, glue(" '{new_pkg}' is already in '{path}'"))
+    return(invisible(NULL))
   }
 
-  if(!is.null(purpose)){
-
-    if(!is.character(purpose)){
-      stop("purpose should be a character value of length 1")
+  if (!is.null(purpose)) {
+    if (!is.character(purpose) || length(purpose) != 1) {
+      stop("purpose should be a character value of length 1", call. = FALSE)
     }
-
-    if(!length(purpose) == 1){
-      stop("purpose should be a character value of length 1",
-           call. = FALSE)
-    }
-
-    if(!grepl(pattern = "^\\#", x = purpose))
+    if (!grepl(pattern = "^\\#", x = purpose))
       purpose <- paste("#", purpose)
-
   }
 
   packages <- c(packages, purpose, new_pkg)
 
-  readr::write_lines(packages, "./packages.R")
+  readr::write_lines(packages, path)
 
-  message(cli::symbol$tick,
-          glue::glue(" Writing '{new_pkg}' to './packages.R'"))
+  message(symbol$tick, glue(" Writing '{new_pkg}' to '{path}'"))
 
-  library(name, character.only = TRUE)  # attaches globally
-
-  message(cli::symbol$tick,
-          glue::glue(" '{name}' has been loaded into your R session"))
+  invisible(NULL)
 
 }

@@ -16,6 +16,9 @@ Imports:
     here,
     readr,
     usethis,
-    here
+    whisker
+Suggests:
+    testthat (>= 3.0.0),
+    withr
 URL: https://github.com/bcjaeger/pericircumference
 BugReports: https://github.com/bcjaeger/pericircumference/issues

@@ -1,7 +1,7 @@
 ---
-title: "Template: Results Presentation"
+title: "{{{slides_title}}}"
 subtitle: "Start here when making deliverables with PowerPoint"
-author: "[Byron C. Jaeger, PhD](https://www.byronjaeger.com/)"
+author: "{{{author}}}"
 date: "`r format(Sys.time(), '%B %d, %Y')`" 
 always_allow_html: true
 output: 

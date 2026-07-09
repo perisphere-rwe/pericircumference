@@ -5,18 +5,22 @@
 #' to quickly set up a project with a Word report and no slides or tutorials.
 #' Equivalent to calling
 #' `use_pericircumference(doc_format = "office", include_tutorials = FALSE,
-#' include_report = TRUE, include_slides = FALSE)`.
+#' include_report = TRUE, include_slides = FALSE, ...)`.
+#'
+#' @param ... additional arguments passed to [use_pericircumference()],
+#'   e.g. `report_name = "results"`.
 #'
 #' @return Nothing. Modifies your workspace.
 #'
 #' @export
 #'
-use_pericircumference_report_ms <- function() {
+use_pericircumference_report_ms <- function(...) {
   use_pericircumference(
-    doc_format = "office",
+    doc_format        = "office",
     include_tutorials = FALSE,
-    include_report = TRUE,
-    include_slides = FALSE
+    include_report    = TRUE,
+    include_slides    = FALSE,
+    ...
   )
 }
 
@@ -26,18 +30,22 @@ use_pericircumference_report_ms <- function() {
 #' to quickly set up a project with a Quarto report and no slides or tutorials.
 #' Equivalent to calling
 #' `use_pericircumference(doc_format = "quarto", include_tutorials = FALSE,
-#' include_report = TRUE, include_slides = FALSE)`.
+#' include_report = TRUE, include_slides = FALSE, ...)`.
+#'
+#' @param ... additional arguments passed to [use_pericircumference()],
+#'   e.g. `report_name = "results"`.
 #'
 #' @return Nothing. Modifies your workspace.
 #'
 #' @export
 #'
-use_pericircumference_report_qt <- function() {
+use_pericircumference_report_qt <- function(...) {
   use_pericircumference(
-    doc_format = "quarto",
+    doc_format        = "quarto",
     include_tutorials = FALSE,
-    include_report = TRUE,
-    include_slides = FALSE
+    include_report    = TRUE,
+    include_slides    = FALSE,
+    ...
   )
 }
 
@@ -47,18 +55,22 @@ use_pericircumference_report_qt <- function() {
 #' to quickly set up a project with PowerPoint slides and no report or
 #' tutorials. Equivalent to calling
 #' `use_pericircumference(doc_format = "office", include_tutorials = FALSE,
-#' include_report = FALSE, include_slides = TRUE)`.
+#' include_report = FALSE, include_slides = TRUE, ...)`.
+#'
+#' @param ... additional arguments passed to [use_pericircumference()],
+#'   e.g. `slides_name = "presentation"`.
 #'
 #' @return Nothing. Modifies your workspace.
 #'
 #' @export
 #'
-use_pericircumference_slides_ms <- function() {
+use_pericircumference_slides_ms <- function(...) {
   use_pericircumference(
-    doc_format = "office",
+    doc_format        = "office",
     include_tutorials = FALSE,
-    include_report = FALSE,
-    include_slides = TRUE
+    include_report    = FALSE,
+    include_slides    = TRUE,
+    ...
   )
 }
 
@@ -68,17 +80,21 @@ use_pericircumference_slides_ms <- function() {
 #' to quickly set up a project with Quarto slides and no report or tutorials.
 #' Equivalent to calling
 #' `use_pericircumference(doc_format = "quarto", include_tutorials = FALSE,
-#' include_report = FALSE, include_slides = TRUE)`.
+#' include_report = FALSE, include_slides = TRUE, ...)`.
+#'
+#' @param ... additional arguments passed to [use_pericircumference()],
+#'   e.g. `slides_name = "presentation"`.
 #'
 #' @return Nothing. Modifies your workspace.
 #'
 #' @export
 #'
-use_pericircumference_slides_qt <- function() {
+use_pericircumference_slides_qt <- function(...) {
   use_pericircumference(
-    doc_format = "quarto",
+    doc_format        = "quarto",
     include_tutorials = FALSE,
-    include_report = FALSE,
-    include_slides = TRUE
+    include_report    = FALSE,
+    include_slides    = TRUE,
+    ...
   )
 }
