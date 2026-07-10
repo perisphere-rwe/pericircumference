@@ -10,7 +10,12 @@ use_pericircumference(
   include_report = TRUE,
   include_slides = TRUE,
   report_name = "report",
-  slides_name = "slides"
+  slides_name = "slides",
+  report_title = "Report",
+  slides_title = "Presentation",
+  author = "",
+  include_helpers_flextable = TRUE,
+  include_helpers_misc = FALSE
 )
 }
 \arguments{
@@ -43,6 +48,22 @@ e.g. \code{"results"} to get \code{results/results.Rmd} instead.}
 directory and document file. Defaults to \code{"slides"}, which produces a
 \verb{slides/} directory containing \code{slides.Rmd} (or \code{slides.qmd}). Set to
 e.g. \code{"presentation"} to get \code{presentation/presentation.Rmd} instead.}
+
+\item{report_title}{a character value used as the \verb{title:} field in the
+report document's YAML front matter. Defaults to \code{"Report"}.}
+
+\item{slides_title}{a character value used as the \verb{title:} field in the
+slides document's YAML front matter. Defaults to \code{"Presentation"}.}
+
+\item{author}{a character value used as the \verb{author:} field in all
+generated documents' YAML front matter. Defaults to \code{""} (empty).}
+
+\item{include_helpers_flextable}{a logical value indicating whether to copy
+\code{flextable.R} into \verb{R/}. Contains helper functions for building flextable
+objects. Defaults to \code{TRUE}.}
+
+\item{include_helpers_misc}{a logical value indicating whether to copy
+\code{summarize_each_group.R} and \code{shift.R} into \verb{R/}. Defaults to \code{FALSE}.}
 }
 \value{
 Nothing. Modifies your workspace.

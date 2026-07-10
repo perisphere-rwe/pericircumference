@@ -72,13 +72,20 @@ use_pericircumference <- function(doc_format               = "office",
                                   slides_title              = "Presentation",
                                   author                    = "",
                                   include_helpers_flextable = TRUE,
-                                  include_helpers_misc      = FALSE) {
+                                  include_helpers_misc      = TRUE) {
 
   if (here() != getwd()) {
     stop("`use_pericircumference()` requires the current working directory",
          " be the main directory of the current project.\n",
          " - Current working directory: ", getwd(), "\n",
          " - Main directory of current project: ", here())
+  }
+
+  if(include_tutorials && !include_helpers_misc){
+    include_helpers_misc <- TRUE
+    warning("miscellaneous helper functions are used by tutorials, ",
+            "so they will be included. Set `include_helpers_misc` to `TRUE` ",
+            "to silence this warning.")
   }
 
   md_type       <- switch(doc_format, 'office' = 'Rmd', 'quarto' = 'qmd')

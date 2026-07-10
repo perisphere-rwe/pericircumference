@@ -4,7 +4,11 @@
 \alias{use_pericircumference_slides_qt}
 \title{Initialize a Quarto HTML slides project}
 \usage{
-use_pericircumference_slides_qt()
+use_pericircumference_slides_qt(...)
+}
+\arguments{
+\item{...}{additional arguments passed to \code{\link[=use_pericircumference]{use_pericircumference()}},
+e.g. \code{slides_name = "presentation"}.}
 }
 \value{
 Nothing. Modifies your workspace.
@@ -13,7 +17,5 @@ Nothing. Modifies your workspace.
 A wrapper around \code{\link[=use_pericircumference]{use_pericircumference()}} for experienced users who want
 to quickly set up a project with Quarto slides and no report or tutorials.
 Equivalent to calling
-\code{use_pericircumference(doc_format = "quarto", include_tutorials = FALSE, include_report = FALSE, include_slides = TRUE)}.
-To use a custom directory/file name, call \code{\link[=use_pericircumference]{use_pericircumference()}} directly
-with the \code{slides_name} argument.
+\code{use_pericircumference(doc_format = "quarto", include_tutorials = FALSE, include_report = FALSE, include_slides = TRUE, ...)}.
 }
