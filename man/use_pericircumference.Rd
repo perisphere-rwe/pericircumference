@@ -13,9 +13,7 @@ use_pericircumference(
   slides_name = "slides",
   report_title = "Report",
   slides_title = "Presentation",
-  author = "",
-  include_helpers_flextable = TRUE,
-  include_helpers_misc = FALSE
+  author = ""
 )
 }
 \arguments{
@@ -57,13 +55,6 @@ slides document's YAML front matter. Defaults to \code{"Presentation"}.}
 
 \item{author}{a character value used as the \verb{author:} field in all
 generated documents' YAML front matter. Defaults to \code{""} (empty).}
-
-\item{include_helpers_flextable}{a logical value indicating whether to copy
-\code{flextable.R} into \verb{R/}. Contains helper functions for building flextable
-objects. Defaults to \code{TRUE}.}
-
-\item{include_helpers_misc}{a logical value indicating whether to copy
-\code{summarize_each_group.R} and \code{shift.R} into \verb{R/}. Defaults to \code{FALSE}.}
 }
 \value{
 Nothing. Modifies your workspace.
@@ -75,4 +66,16 @@ those objects into a results document. The results document itself goes
 through iterations designated by versions. This may seem unnecessary when
 using GitHub to handle version control, but it is often helpful to keep
 versions of old results documents in a space that is easy to access.
+}
+\details{
+Optional helper scripts (flextable formatting helpers, \code{data.table}
+helpers, tidyverse/dplyr helpers, Market Clarity database connection
+helpers) are \strong{not} added automatically. Use the \verb{use_helpers_*()}
+family of functions (e.g. \code{\link[=use_helpers_flextable]{use_helpers_flextable()}},
+\code{\link[=use_helpers_datatable]{use_helpers_datatable()}}, \code{\link[=use_helpers_tidyverse]{use_helpers_tidyverse()}},
+\code{\link[=use_helpers_market_clarity]{use_helpers_market_clarity()}}) to add them to \verb{R/} on demand, after
+running this function. The one exception is \code{include_tutorials = TRUE},
+which requires \code{summarize_each_group()}, \code{flextable_polish()}, and
+\code{flextable_polish_ppt()}, so \code{R/summarize_each_group.R} and
+\code{R/flextable.R} are added for you automatically in that case.
 }

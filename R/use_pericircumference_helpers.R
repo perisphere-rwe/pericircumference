@@ -1,4 +1,18 @@
 
+# .peri_assert_project_root -----------------------------------------------------
+
+.peri_assert_project_root <- function() {
+  project_root <- normalizePath(here::here(), winslash = "/")
+  working_dir  <- normalizePath(getwd(),      winslash = "/")
+
+  if (project_root != working_dir) {
+    stop("this function requires the current working directory",
+         " be the main directory of the current project.\n",
+         " - Current working directory: ", working_dir, "\n",
+         " - Main directory of current project: ", project_root)
+  }
+}
+
 # .peri_add_core_files ---------------------------------------------------------
 
 .peri_add_core_files <- function(tmpl_data) {
@@ -14,12 +28,17 @@
                         data = tmpl_data)
 }
 
-# .peri_add_r_helpers_misc -----------------------------------------------------
+# .peri_add_r_helpers_tidyverse -------------------------------------------------
 
-.peri_add_r_helpers_misc <- function() {
+.peri_add_r_helpers_tidyverse <- function() {
   usethis::use_template("summarize_each_group.R",
                         save_as = "R/summarize_each_group.R",
                         package = "pericircumference")
+}
+
+# .peri_add_r_helpers_datatable --------------------------------------------------
+
+.peri_add_r_helpers_datatable <- function() {
   usethis::use_template("shift.R",
                         save_as = "R/shift.R",
                         package = "pericircumference")
@@ -30,6 +49,14 @@
 .peri_add_r_helpers_flex <- function() {
   usethis::use_template("flextable.R",
                         save_as = "R/flextable.R",
+                        package = "pericircumference")
+}
+
+# .peri_add_r_helpers_market_clarity ---------------------------------------------
+
+.peri_add_r_helpers_market_clarity <- function() {
+  usethis::use_template("market_clarity.R",
+                        save_as = "R/market_clarity.R",
                         package = "pericircumference")
 }
 

@@ -25,15 +25,6 @@ test_that("use_pericircumference_report_ms() passes correct fixed arguments", {
   expect_equal(args$include_slides,    FALSE)
 })
 
-test_that("use_pericircumference_report_ms() forwards include_helpers_* via ...", {
-  args <- capture_pericircumference_args(
-    use_pericircumference_report_ms(include_helpers_flextable = FALSE,
-                                    include_helpers_misc      = TRUE)
-  )
-  expect_equal(args$include_helpers_flextable, FALSE)
-  expect_equal(args$include_helpers_misc,      TRUE)
-})
-
 test_that("use_pericircumference_report_ms() forwards ... to use_pericircumference()", {
   args <- capture_pericircumference_args(
     use_pericircumference_report_ms(report_name = "results")

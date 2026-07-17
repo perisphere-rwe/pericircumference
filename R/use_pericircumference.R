@@ -46,17 +46,21 @@
 #' @param author a character value used as the `author:` field in all
 #'   generated documents' YAML front matter. Defaults to `""` (empty).
 #'
-#' @param include_helpers_flextable a logical value indicating whether to copy
-#'   `flextable.R` into `R/`. Contains helper functions for building flextable
-#'   objects. Defaults to `TRUE`.
-#'
-#' @param include_helpers_misc a logical value indicating whether to copy
-#'   `summarize_each_group.R` and `shift.R` into `R/`. Defaults to `FALSE`.
-#'
 #' @return Nothing. Modifies your workspace.
 #'
+#' @details
+#' Optional helper scripts (flextable formatting helpers, `data.table`
+#' helpers, tidyverse/dplyr helpers, Market Clarity database connection
+#' helpers) are **not** added automatically. Use the `use_helpers_*()`
+#' family of functions (e.g. [use_helpers_flextable()],
+#' [use_helpers_datatable()], [use_helpers_tidyverse()],
+#' [use_helpers_market_clarity()]) to add them to `R/` on demand, after
+#' running this function. The one exception is `include_tutorials = TRUE`,
+#' which requires `summarize_each_group()`, `flextable_polish()`, and
+#' `flextable_polish_ppt()`, so `R/summarize_each_group.R` and
+#' `R/flextable.R` are added for you automatically in that case.
+#'
 #' @importFrom glue glue
-#' @importFrom here here
 #' @importFrom readr write_rds
 #' @importFrom usethis use_directory use_template
 #'
@@ -70,23 +74,9 @@ use_pericircumference <- function(doc_format               = "office",
                                   slides_name               = "slides",
                                   report_title              = "Report",
                                   slides_title              = "Presentation",
-                                  author                    = "",
-                                  include_helpers_flextable = TRUE,
-                                  include_helpers_misc      = TRUE) {
+                                  author                    = "") {
 
-  if (here() != getwd()) {
-    stop("`use_pericircumference()` requires the current working directory",
-         " be the main directory of the current project.\n",
-         " - Current working directory: ", getwd(), "\n",
-         " - Main directory of current project: ", here())
-  }
-
-  if(include_tutorials && !include_helpers_misc){
-    include_helpers_misc <- TRUE
-    warning("miscellaneous helper functions are used by tutorials, ",
-            "so they will be included. Set `include_helpers_misc` to `TRUE` ",
-            "to silence this warning.")
-  }
+  .peri_assert_project_root()
 
   md_type       <- switch(doc_format, 'office' = 'Rmd', 'quarto' = 'qmd')
   tutorial_type <- ifelse(include_tutorials, 'tutorial', 'blank')
@@ -109,8 +99,10 @@ use_pericircumference <- function(doc_format               = "office",
   if (include_slides) use_directory(slides_name)
 
   .peri_add_core_files(tmpl_data)
-  if (include_helpers_flextable) .peri_add_r_helpers_flex()
-  if (include_helpers_misc)      .peri_add_r_helpers_misc()
+  if (include_tutorials) {
+    .peri_add_r_helpers_tidyverse()
+    .peri_add_r_helpers_flex()
+  }
   .peri_add_pipeline(doc_format, tutorial_type, tmpl_data)
 
   if (include_report) .peri_add_report(doc_format, tutorial_type, report_name, md_type, tmpl_data)

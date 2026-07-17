@@ -32,6 +32,27 @@ make_tmpl_data <- function(report_name        = "report",
 }
 
 
+# .peri_assert_project_root() ---------------------------------------------
+
+test_that(".peri_assert_project_root() passes silently when here() == getwd()", {
+  tmp <- withr::local_tempdir()
+  testthat::local_mocked_bindings(here = function(...) tmp, .package = "here")
+  withr::with_dir(tmp, {
+    expect_no_error(.peri_assert_project_root())
+  })
+})
+
+test_that(".peri_assert_project_root() errors when here() != getwd()", {
+  tmp <- withr::local_tempdir()
+  other <- withr::local_tempdir()
+  testthat::local_mocked_bindings(here = function(...) other, .package = "here")
+  withr::with_dir(tmp, {
+    expect_error(.peri_assert_project_root(),
+                 regexp = "current working directory")
+  })
+})
+
+
 # .peri_use_binary() ------------------------------------------------------
 
 test_that(".peri_use_binary() copies file to destination", {
@@ -108,17 +129,29 @@ test_that(".peri_add_core_files() substitutes custom dir names into create_outpu
 })
 
 
-# .peri_add_r_helpers_misc() ----------------------------------------------
+# .peri_add_r_helpers_tidyverse() ------------------------------------------
 
-test_that(".peri_add_r_helpers_misc() creates summarize_each_group.R and shift.R", {
+test_that(".peri_add_r_helpers_tidyverse() creates only summarize_each_group.R", {
   tmp <- local_perisphere_project()
   dir.create(file.path(tmp, "R"))
-  suppressMessages(.peri_add_r_helpers_misc())
+  suppressMessages(.peri_add_r_helpers_tidyverse())
 
   expect_true(file.exists(file.path(tmp, "R", "summarize_each_group.R")))
-  expect_true(file.exists(file.path(tmp, "R", "shift.R")))
+  expect_false(file.exists(file.path(tmp, "R", "shift.R")))
   expect_false(file.exists(file.path(tmp, "R", "flextable.R")))
   expect_false(file.exists(file.path(tmp, "R", "create_output_directories.R")))
+})
+
+# .peri_add_r_helpers_datatable() ------------------------------------------
+
+test_that(".peri_add_r_helpers_datatable() creates only shift.R", {
+  tmp <- local_perisphere_project()
+  dir.create(file.path(tmp, "R"))
+  suppressMessages(.peri_add_r_helpers_datatable())
+
+  expect_true(file.exists(file.path(tmp, "R", "shift.R")))
+  expect_false(file.exists(file.path(tmp, "R", "summarize_each_group.R")))
+  expect_false(file.exists(file.path(tmp, "R", "flextable.R")))
 })
 
 # .peri_add_r_helpers_flex() ----------------------------------------------
@@ -131,6 +164,17 @@ test_that(".peri_add_r_helpers_flex() creates flextable.R", {
   expect_true(file.exists(file.path(tmp, "R", "flextable.R")))
   expect_false(file.exists(file.path(tmp, "R", "shift.R")))
   expect_false(file.exists(file.path(tmp, "R", "summarize_each_group.R")))
+})
+
+# .peri_add_r_helpers_market_clarity() -------------------------------------
+
+test_that(".peri_add_r_helpers_market_clarity() creates market_clarity.R", {
+  tmp <- local_perisphere_project()
+  dir.create(file.path(tmp, "R"))
+  suppressMessages(.peri_add_r_helpers_market_clarity())
+
+  expect_true(file.exists(file.path(tmp, "R", "market_clarity.R")))
+  expect_false(file.exists(file.path(tmp, "R", "flextable.R")))
 })
 
 
