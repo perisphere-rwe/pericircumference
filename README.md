@@ -1,10 +1,8 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # pericircumference
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 A project manager designed for workflows that generate reports, slides,
@@ -16,9 +14,7 @@ Real World Evidence.
 
 You can install the development version of pericircumference like so:
 
-``` r
-renv::install("perisphere-rwe/pericircumference")
-```
+    renv::install("perisphere-rwe/pericircumference")
 
 ## Purpose
 
@@ -41,10 +37,24 @@ current working directory with the following files and directories:
 - the `R` directory:
   - `R/create_output_directories.R`: helper function used for updates
     (more on this below)
-  - `R/flextable`: helper functions for `flextable` objects
-  - `R/summarize_each_group`: wrapper around `dplyr::summarize`, allows
-    results to be summarized by group and include an overall summary as
-    well.
+  - `R/summarize_each_group.R` and `R/flextable.R`: only added when
+    `include_tutorials = TRUE`, since the tutorial report/slides
+    templates call `summarize_each_group()`, `flextable_polish()`, and
+    `flextable_polish_ppt()`.
+
+Optional helper scripts are **not** added automatically (other than
+`summarize_each_group.R`/`flextable.R` for tutorials, as noted above).
+Add them on demand with the `use_helpers_*()` family:
+
+- `use_helpers_flextable()`: adds `R/flextable.R`, helper functions for
+  styling `flextable` objects.
+- `use_helpers_datatable()`: adds `R/shift.R`, wrappers around
+  `data.table::shift()` that make the shift direction explicit.
+- `use_helpers_tidyverse()`: adds `R/summarize_each_group.R` (see above)
+  — useful to run explicitly for non-tutorial projects.
+- `use_helpers_market_clarity()`: adds `R/market_clarity.R`, containing
+  `connect_to_db()` for connecting to Market Clarity data (a local
+  DuckDB “mini” database or the full Databricks cluster).
 - the `report` directory:
   - `report.Rmd`: generates the project report (can be MS word or html)
   - miscellaneous template files for styling the report
@@ -66,17 +76,13 @@ convenient to load the package automatically in every R session. The
 right place to do this is your `.Rprofile`. You can open it with
 `usethis`:
 
-``` r
-usethis::edit_r_profile()
-```
+    usethis::edit_r_profile()
 
 Then add the following and save the file:
 
-``` r
-if (interactive()) {
-  library(pericircumference)
-}
-```
+    if (interactive()) {
+      library(pericircumference)
+    }
 
 Restart R and the package will be available in every interactive session
 without needing to call `library()` manually. The `if (interactive())`
@@ -91,9 +97,7 @@ setup and are never called from within the pipeline itself.
 
 In a fresh RStudio project, run:
 
-``` r
-use_pericircumference(include_tutorials = TRUE)
-```
+    use_pericircumference(include_tutorials = TRUE)
 
 This populates your working directory with all the files described in
 the [File contents](#file-contents) section above. Because
@@ -107,10 +111,8 @@ Open `_targets.R`. It is organized into four sections.
 **Version guard and setup.** At the top, two variables control the
 output file names:
 
-``` r
-version_major <- 0
-version_minor <- 1
-```
+    version_major <- 0
+    version_minor <- 1
 
 Immediately after, `assert_valid_version()` checks that you haven’t
 accidentally reused a version number that has already been finalized.
@@ -120,9 +122,7 @@ folders (e.g., `report/report-v0/`) if they don’t already exist.
 
 **Data target.** The `data` target loads the penguins dataset:
 
-``` r
-data = palmerpenguins::penguins,
-```
+    data = palmerpenguins::penguins,
 
 Replace this with your own data loading logic as you adapt the template.
 
@@ -131,56 +131,48 @@ attaches human-readable labels, units, and category ordering to variable
 names. This dictionary is used downstream by rendering functions to
 produce clean, consistently labeled tables and figures:
 
-``` r
-meta = as_data_dictionary(data) %>%
-  set_labels(species = "Species", body_mass_g = "Body mass", ...) %>%
-  set_units(bill_length_mm = "mm", ...) %>%
-  ...
-```
+    meta = as_data_dictionary(data) %>%
+      set_labels(species = "Species", body_mass_g = "Body mass", ...) %>%
+      set_units(bill_length_mm = "mm", ...) %>%
+      ...
 
 **Stats target.** The `stats` target computes summary statistics grouped
 by species, then converts the results into an inline-reporting format
 using `as_inline()`. The `.group_level` and `name` columns become keys
 you reference directly in the report or slides:
 
-``` r
-tar_target(stats, command = {
-  data %>%
-    group_by(species) %>%
-    summarize_each_group(
-      mean_bill_length = mean(bill_length_mm, na.rm = TRUE),
-      mean_mass        = mean(body_mass_g, na.rm = TRUE),
-      sd_mass          = sd(body_mass_g, na.rm = TRUE),
-      nobs             = n()
-    ) %>%
-    pivot_longer(cols = c(mean_bill_length, mean_mass, sd_mass, nobs)) %>%
-    select(-.group_variable) %>%
-    as_inline(tbl_variables = c(".group_level", "name"),
-              tbl_values    = "value")
-})
-```
+    tar_target(stats, command = {
+      data %>%
+        group_by(species) %>%
+        summarize_each_group(
+          mean_bill_length = mean(bill_length_mm, na.rm = TRUE),
+          mean_mass        = mean(body_mass_g, na.rm = TRUE),
+          sd_mass          = sd(body_mass_g, na.rm = TRUE),
+          nobs             = n()
+        ) %>%
+        pivot_longer(cols = c(mean_bill_length, mean_mass, sd_mass, nobs)) %>%
+        select(-.group_variable) %>%
+        as_inline(tbl_variables = c(".group_level", "name"),
+                  tbl_values    = "value")
+    })
 
 **Rendering targets.** At the bottom, `tar_render()` targets knit the
 report and slides, writing the output to version-stamped file paths so
 that each finalized version is preserved:
 
-``` r
-tar_render(
-  report,
-  path        = here::here("report/report.Rmd"),
-  output_file = paste0("report-v", version_major, "/",
-                       "report-", basename(here()),
-                       "-v", version_major, "-", version_minor, ".docx")
-)
-```
+    tar_render(
+      report,
+      path        = here::here("report/report.Rmd"),
+      output_file = paste0("report-v", version_major, "/",
+                           "report-", basename(here()),
+                           "-v", version_major, "-", version_minor, ".docx")
+    )
 
 ### Step 3: Run the pipeline
 
 With `_targets.R` saved, run the pipeline from the R console:
 
-``` r
-targets::tar_make()
-```
+    targets::tar_make()
 
 This produces your first set of outputs,
 e.g. `report/report-v0/report-my-project-v0-1.docx` and
@@ -204,9 +196,7 @@ what the initial results contain:
 Once you are ready to share the version 0.1 results with collaborators,
 run:
 
-``` r
-finalize_version(major = 0, minor = 1)
-```
+    finalize_version(major = 0, minor = 1)
 
 This saves `"0.1"` to `version.rds`, prints the changelog entries to
 your console (copy and paste into your email), and reminds you to
@@ -219,27 +209,23 @@ Follow those reminders now: change `version_minor` to `2` in
 Suppose you want to add mean flipper length to the summary statistics.
 Edit the `stats` target in `_targets.R` to include the new variable:
 
-``` r
-summarize_each_group(
-  mean_bill_length    = mean(bill_length_mm, na.rm = TRUE),
-  mean_flipper_length = mean(flipper_length_mm, na.rm = TRUE),  # new
-  mean_mass           = mean(body_mass_g, na.rm = TRUE),
-  sd_mass             = sd(body_mass_g, na.rm = TRUE),
-  nobs                = n()
-) %>%
-pivot_longer(cols = c(mean_bill_length,
-                      mean_flipper_length,                      # new
-                      mean_mass, sd_mass, nobs)) %>%
-```
+    summarize_each_group(
+      mean_bill_length    = mean(bill_length_mm, na.rm = TRUE),
+      mean_flipper_length = mean(flipper_length_mm, na.rm = TRUE),  # new
+      mean_mass           = mean(body_mass_g, na.rm = TRUE),
+      sd_mass             = sd(body_mass_g, na.rm = TRUE),
+      nobs                = n()
+    ) %>%
+    pivot_longer(cols = c(mean_bill_length,
+                          mean_flipper_length,                      # new
+                          mean_mass, sd_mass, nobs)) %>%
 
 ### Step 7: Apply the data dictionary in `report.Rmd`
 
 Open `report.Rmd`. In the `setup-dictionary` chunk near the top, you
 will find:
 
-``` r
-set_default_dictionary(meta)
-```
+    set_default_dictionary(meta)
 
 This registers `meta` as the default dictionary for the session. From
 this point on, `translate_data()` — used to rename raw variable names to
@@ -251,10 +237,8 @@ You will use this in the table and figure steps below.
 The `setup-formatters` chunk in `report.Rmd` creates two short aliases
 for formatting results:
 
-``` r
-tv <- table.glue::table_value  # formats a single number
-tg <- table.glue::table_glue   # formats with a template string
-```
+    tv <- periglue::peri_value  # formats a single number
+    tg <- periglue::peri_glue   # formats with a template string
 
 The `stats` target is loaded at the top of the document and organized as
 a named list. The top level is the grouping variable value (e.g.,
@@ -275,26 +259,26 @@ To report a species-specific value, index by species name instead:
 In the Tables section of `report.Rmd`, add a new subsection with a
 flextable built from the raw `data`. Use `translate_data()` to apply the
 dictionary to column headers, and use the `flextable_autofit()` and
-`flextable_polish()` helpers from `R/flextable.R` to style it:
+`flextable_polish()` helpers from `R/flextable.R` (added automatically
+because this tutorial project was initialized with
+`include_tutorials = TRUE`) to style it:
 
-```` markdown
-## Table 2: Flipper and bill length by species
+    ## Table 2: Flipper and bill length by species
 
-```{r}
-data %>%
-  group_by(species) %>%
-  summarise(
-    n                   = n(),
-    mean_flipper_length = mean(flipper_length_mm, na.rm = TRUE),
-    mean_bill_length    = mean(bill_length_mm, na.rm = TRUE)
-  ) %>%
-  mutate(across(where(is.numeric), table_value)) %>%
-  translate_data(units = 'descriptive') %>%
-  flextable() %>%
-  flextable_autofit(prop_used_col_1 = 0.25) %>%
-  flextable_polish(footer_text = abbrvs_write(abbrvs['mm']))
-```
-````
+    ```{r}
+    data %>%
+      group_by(species) %>%
+      summarise(
+        n                   = n(),
+        mean_flipper_length = mean(flipper_length_mm, na.rm = TRUE),
+        mean_bill_length    = mean(bill_length_mm, na.rm = TRUE)
+      ) %>%
+      mutate(across(where(is.numeric), peri_value)) %>%
+      translate_data(units = 'descriptive') %>%
+      flextable() %>%
+      flextable_autofit(prop_used_col_1 = 0.25) %>%
+      flextable_polish(footer_text = abbrvs_write(abbrvs['mm']))
+    ```
 
 `translate_data(units = 'descriptive')` replaces raw column names (e.g.,
 `mean_flipper_length`) with the labels and units defined in `meta`
@@ -315,18 +299,16 @@ landscape and resets figure dimensions to portrait for what follows.
 
 Add the following to the Figures section of `report.Rmd`:
 
-```` markdown
-`r page_long_above()`
+    `r page_long_above()`
 
-## Figure 1: Bill length vs. flipper length
+    ## Figure 1: Bill length vs. flipper length
 
-```{r}
-ggplot(data, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
-  geom_point()
-```
+    ```{r}
+    ggplot(data, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
+      geom_point()
+    ```
 
-`r page_wide_above()`
-````
+    `r page_wide_above()`
 
 The `page_long_above()` call above the heading switches the figure chunk
 below it to 11 × 6 inch dimensions. `page_wide_above()` at the end marks
@@ -352,9 +334,7 @@ time to share the update.
 
 Run `tar_make()` again:
 
-``` r
-targets::tar_make()
-```
+    targets::tar_make()
 
 Only the targets that depend on your change (in this case `stats`,
 `report`, and `slides`) will re-execute. The new outputs land in
@@ -366,9 +346,7 @@ files remain untouched.
 
 When you are ready to share the updated results, run:
 
-``` r
-finalize_version(major = 0, minor = 2)
-```
+    finalize_version(major = 0, minor = 2)
 
 This prints the version 0.2 changelog entries to your console for
 copying into an email. Follow the same reminders as before: increment

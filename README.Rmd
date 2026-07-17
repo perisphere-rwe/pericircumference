@@ -43,8 +43,14 @@ Running `use_pericircumference()` in the R console will populate your current wo
 - `.gitignore`: manages which files and directories are ignored by git
 - the `R` directory:
     + `R/create_output_directories.R`: helper function used for updates (more on this below)
-    + `R/flextable`: helper functions for `flextable` objects
-    + `R/summarize_each_group`: wrapper around `dplyr::summarize`, allows results to be summarized by group and include an overall summary as well.
+    + `R/summarize_each_group.R` and `R/flextable.R`: only added when `include_tutorials = TRUE`, since the tutorial report/slides templates call `summarize_each_group()`, `flextable_polish()`, and `flextable_polish_ppt()`.
+
+Optional helper scripts are **not** added automatically (other than `summarize_each_group.R`/`flextable.R` for tutorials, as noted above). Add them on demand with the `use_helpers_*()` family:
+
+- `use_helpers_flextable()`: adds `R/flextable.R`, helper functions for styling `flextable` objects.
+- `use_helpers_datatable()`: adds `R/shift.R`, wrappers around `data.table::shift()` that make the shift direction explicit.
+- `use_helpers_tidyverse()`: adds `R/summarize_each_group.R` (see above) — useful to run explicitly for non-tutorial projects.
+- `use_helpers_market_clarity()`: adds `R/market_clarity.R`, containing `connect_to_db()` for connecting to Market Clarity data (a local DuckDB "mini" database or the full Databricks cluster).
 - the `report` directory:
     + `report.Rmd`: generates the project report (can be MS word or html)
     + miscellaneous template files for styling the report
@@ -207,8 +213,8 @@ This registers `meta` as the default dictionary for the session. From this point
 The `setup-formatters` chunk in `report.Rmd` creates two short aliases for formatting results:
 
 ``` r
-tv <- table.glue::table_value  # formats a single number
-tg <- table.glue::table_glue   # formats with a template string
+tv <- periglue::peri_value  # formats a single number
+tg <- periglue::peri_glue   # formats with a template string
 ```
 
 The `stats` target is loaded at the top of the document and organized as a named list. The top level is the grouping variable value (e.g., `Adelie`, `Chinstrap`, `Gentoo`, and `.overall` for the full sample), and the second level is the statistic name. To report the overall mean flipper length inline, add a sentence to the text body of `report.Rmd`:
@@ -221,7 +227,7 @@ To report a species-specific value, index by species name instead:
 
 ### Step 9: Create a new table
 
-In the Tables section of `report.Rmd`, add a new subsection with a flextable built from the raw `data`. Use `translate_data()` to apply the dictionary to column headers, and use the `flextable_autofit()` and `flextable_polish()` helpers from `R/flextable.R` to style it:
+In the Tables section of `report.Rmd`, add a new subsection with a flextable built from the raw `data`. Use `translate_data()` to apply the dictionary to column headers, and use the `flextable_autofit()` and `flextable_polish()` helpers from `R/flextable.R` (added automatically because this tutorial project was initialized with `include_tutorials = TRUE`) to style it:
 
 ```` markdown
 ## Table 2: Flipper and bill length by species
@@ -234,7 +240,7 @@ data %>%
     mean_flipper_length = mean(flipper_length_mm, na.rm = TRUE),
     mean_bill_length    = mean(bill_length_mm, na.rm = TRUE)
   ) %>%
-  mutate(across(where(is.numeric), table_value)) %>%
+  mutate(across(where(is.numeric), peri_value)) %>%
   translate_data(units = 'descriptive') %>%
   flextable() %>%
   flextable_autofit(prop_used_col_1 = 0.25) %>%

@@ -1,7 +1,7 @@
 ---
-title: "Template: Results Presentation"
+title: "{{{slides_title}}}"
 subtitle: "Start here when making deliverables with PowerPoint"
-author: "[Byron C. Jaeger, PhD](https://www.byronjaeger.com/)"
+author: "{{{author}}}"
 date: "`r format(Sys.time(), '%B %d, %Y')`" 
 always_allow_html: true
 output: 
@@ -39,7 +39,7 @@ library(officer)
 library(flextable)
 
 # specify a rounding specification 
-library(table.glue)
+library(periglue)
 
 # general purpose
 library(tidyverse)
@@ -63,10 +63,10 @@ library(gtsummary)
 
 ```{r setup-formatters}
 
-# make a short name for table.glue::table_value - this makes
+# make a short name for periglue::peri_value - this makes
 # the inline reporting of results less complicated to read.
-tv <- table.glue::table_value
-tg <- table.glue::table_glue
+tv <- periglue::peri_value
+tg <- periglue::peri_glue
 
 r_version <- tg("{version$major}.{version$minor}")
 

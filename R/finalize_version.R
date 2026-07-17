@@ -1,8 +1,6 @@
 
-
 read_changelog_latest <- function(path = "changelog.md",
                                   version_starts_with = "## Version") {
-
 
   if (!file.exists(path)) {
 
@@ -24,7 +22,7 @@ read_changelog_latest <- function(path = "changelog.md",
   idx <- grep(paste0("^", version_starts_with), lines)
 
   if (length(idx) == 0) {
-    stop('No occurrences of "', version_starts_with,'" found in changelog.md',
+    stop('No occurrences of "', version_starts_with, '" found in ', path,
          call. = FALSE)
   }
 
@@ -51,76 +49,36 @@ read_changelog_latest <- function(path = "changelog.md",
 #'
 #' @param major (numeric) the current major version of your project
 #' @param minor (numeric) the current minor version of your project
+#' @param version_path a string giving the path to the `version.rds` file.
+#'   Defaults to `"version.rds"` in the current working directory.
+#' @param changelog_path a string giving the path to the changelog file.
+#'   Defaults to `"changelog.md"` in the current working directory.
 #'
 #' @returns no R objects are returned. Files are modified and the most recent
-#'   set of changes are copied to your clipboard so that you can paste them
-#'   into an e-mail where you share the results with collaborators.
+#'   set of changes are printed so that you can paste them into an e-mail
+#'   where you share the results with collaborators.
 #'
 #' @importFrom readr write_rds
 #'
 #' @export
 #'
-finalize_version <- function(major, minor){
-
-  version_path <- 'version.rds'
+finalize_version <- function(major, minor,
+                              version_path   = "version.rds",
+                              changelog_path = "changelog.md") {
 
   current_version <- assert_valid_version(major = major,
                                           minor = minor,
-                                          path = version_path)
+                                          path  = version_path)
 
   write_rds(current_version, version_path)
 
-  changes <- read_changelog_latest()
+  changes <- read_changelog_latest(path = changelog_path)
 
   message("Version ", current_version, " has been finalized.\n",
-          " - The changes in your changelog are written below .\n",
+          " - The changes in your changelog are written below.\n",
           " - Remember to update `version_major` and/or `version_minor` in your _targets.R file.\n",
           " - Remember to make a git commit (if feasible) using the commit message 'finalize version ", current_version, "'")
 
   message("\nChanges in this update:\n", paste(changes, collapse = '\n'))
-
-}
-
-#' Assert validity of the current project version
-#'
-#' This function helps prevent you from accidentally over-writing documents
-#'   that you wanted to remain un-modified when you run `tar_make()`. For
-#'   example, let's say you sent version 1.1 of the results to your colleague
-#'   and then you forgot to change version_minor_current to 2. If you make
-#'   changes to your code and re-run the pipeline, you'll end up over-writing
-#'   version 1.1 of the results. This is annoying and can sometimes create
-#'   issues with reproducibility, so `assert_valid_version()` is included
-#'   at the top of the targets pipeline to make sure this mistake is not
-#'   allowed.
-#'
-#' @inheritParams finalize_version
-#' @param path a string indicating where `version.rds` is stored. This
-#'   should *always* be stored in the project's main directory.
-#'
-#' @returns a string representing the current version
-#'
-#' @importFrom readr read_rds
-#'
-#' @export
-#'
-assert_valid_version <- function(major, minor, path = 'version.rds'){
-
-  if(!file.exists(path)){
-    stop("version.rds file not found. This should not happen.",
-         " email me at bcjaeger@perisphere-rwe.com for help.",
-         call. = FALSE)
-  }
-
-  previous_version <- read_rds(path)
-  current_version <- paste(major, minor, sep = '.')
-
-  if(current_version <= previous_version){
-    stop("version ", current_version, " has already been finalized.",
-         " Did you remember to update `version_major` or `version_minor`",
-         " in your `_targets.R` file?",
-         call. = FALSE)
-  }
-
-  invisible(current_version)
 
 }

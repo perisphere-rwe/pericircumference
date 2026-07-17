@@ -1,18 +1,18 @@
 ---
-title: "Perisphere Template: Results Report"
+title: "{{{report_title}}}"
 subtitle: "Start here when making deliverables with html"
-author: "[Byron C. Jaeger, PhD](https://www.byronjaeger.com/)"
+author: "{{{author}}}"
 date: "Document created on `r format(Sys.time(), '%B %d, %Y')`" 
-bibliography: report/refs.bib
-csl: report/refs.csl
+bibliography: {{{report_dir}}}/refs.bib
+csl: {{{report_dir}}}/refs.csl
 always_allow_html: true
 format: 
   html:
     embed-resources: true
     toc: true
     toc-location: body
-    css: report/perisphere-report.css
-    include-in-header: report/toc-button.html
+    css: {{{report_dir}}}/perisphere-report.css
+    include-in-header: {{{report_dir}}}/toc-button.html
     toc-title: "Contents"
     toc-floating: false
     number-sections: false
@@ -58,7 +58,7 @@ library(officer)
 library(flextable)
 
 # specify a rounding specification 
-library(table.glue)
+library(periglue)
 
 # general purpose
 library(tidyverse)
@@ -97,10 +97,10 @@ theme_set(
 
 ```{r setup-formatters}
 
-# make a short name for table.glue::table_value - this makes
+# make a short name for periglue::peri_value - this makes
 # the inline reporting of results less complicated to read.
-tv <- table.glue::table_value
-tg <- table.glue::table_glue
+tv <- periglue::peri_value
+tg <- periglue::peri_glue
 
 r_version <- tg("{version$major}.{version$minor}")
 

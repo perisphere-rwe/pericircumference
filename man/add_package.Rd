@@ -4,16 +4,19 @@
 \alias{add_package}
 \title{Add a package to packages.R}
 \usage{
-add_package(name, purpose = NULL)
+add_package(name, purpose = NULL, path = "packages.R")
 }
 \arguments{
-\item{name}{the name of the package}
+\item{name}{the name of the package to add.}
 
-\item{purpose}{what's the purpose of the package being added?}
+\item{purpose}{a character string describing why the package is needed.
+Stored as a comment above the \code{library()} call. Optional but encouraged.}
+
+\item{path}{path to the packages file. Defaults to \code{"packages.R"} in the
+current working directory.}
 }
 \value{
-Nothing. Attempts to modify the packages.R file and prints a
-summary message if the modification is successful.
+Nothing, invisibly.
 }
 \description{
 Add a package to packages.R

@@ -4,7 +4,11 @@
 \alias{use_pericircumference_report_qt}
 \title{Initialize a Quarto HTML report project}
 \usage{
-use_pericircumference_report_qt()
+use_pericircumference_report_qt(...)
+}
+\arguments{
+\item{...}{additional arguments passed to \code{\link[=use_pericircumference]{use_pericircumference()}},
+e.g. \code{report_name = "results"}.}
 }
 \value{
 Nothing. Modifies your workspace.
@@ -13,5 +17,5 @@ Nothing. Modifies your workspace.
 A wrapper around \code{\link[=use_pericircumference]{use_pericircumference()}} for experienced users who want
 to quickly set up a project with a Quarto report and no slides or tutorials.
 Equivalent to calling
-\code{use_pericircumference(doc_format = "quarto", include_tutorials = FALSE, include_report = TRUE, include_slides = FALSE)}.
+\code{use_pericircumference(doc_format = "quarto", include_tutorials = FALSE, include_report = TRUE, include_slides = FALSE, ...)}.
 }

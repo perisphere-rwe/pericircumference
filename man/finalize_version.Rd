@@ -4,17 +4,28 @@
 \alias{finalize_version}
 \title{Finalize a release of project results}
 \usage{
-finalize_version(major, minor)
+finalize_version(
+  major,
+  minor,
+  version_path = "version.rds",
+  changelog_path = "changelog.md"
+)
 }
 \arguments{
 \item{major}{(numeric) the current major version of your project}
 
 \item{minor}{(numeric) the current minor version of your project}
+
+\item{version_path}{a string giving the path to the \code{version.rds} file.
+Defaults to \code{"version.rds"} in the current working directory.}
+
+\item{changelog_path}{a string giving the path to the changelog file.
+Defaults to \code{"changelog.md"} in the current working directory.}
 }
 \value{
 no R objects are returned. Files are modified and the most recent
-set of changes are copied to your clipboard so that you can paste them
-into an e-mail where you share the results with collaborators.
+set of changes are printed so that you can paste them into an e-mail
+where you share the results with collaborators.
 }
 \description{
 The main purpose of this function is to facilitate the process of

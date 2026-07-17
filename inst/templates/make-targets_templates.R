@@ -1,4 +1,23 @@
 
+# NOTE: This script is no longer used to generate _targets templates.
+#
+# As of the mustache refactor, the 16 static template files previously generated
+# here have been replaced by 4 parameterized templates:
+#
+#   _targets-office-blank.R
+#   _targets-office-tutorial.R
+#   _targets-quarto-blank.R
+#   _targets-quarto-tutorial.R
+#
+# These templates use whisker/mustache syntax ({{#section}}, {{{token}}}) so
+# that directory names, file names, and inclusion flags are substituted at
+# project-init time via usethis::use_template(data = ...). See
+# R/use_pericircumference.R for how the data list is constructed.
+#
+# This file is kept as a historical reference for the original generation
+# approach. Do not run it — it will not produce useful output.
+
+# ---- original script below (archived) ----------------------------------------
 
 preamble <- '
 source("packages.R")

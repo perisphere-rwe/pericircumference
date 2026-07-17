@@ -8,7 +8,12 @@ use_pericircumference(
   doc_format = "office",
   include_tutorials = TRUE,
   include_report = TRUE,
-  include_slides = TRUE
+  include_slides = TRUE,
+  report_name = "report",
+  slides_name = "slides",
+  report_title = "Report",
+  slides_title = "Presentation",
+  author = ""
 )
 }
 \arguments{
@@ -31,6 +36,25 @@ documents required for presenting results in a report.}
 
 \item{include_slides}{a logical value indicating whether to include template
 documents required for presenting results in slides.}
+
+\item{report_name}{a character value giving the name used for the report
+directory and document file. Defaults to \code{"report"}, which produces a
+\verb{report/} directory containing \code{report.Rmd} (or \code{report.qmd}). Set to
+e.g. \code{"results"} to get \code{results/results.Rmd} instead.}
+
+\item{slides_name}{a character value giving the name used for the slides
+directory and document file. Defaults to \code{"slides"}, which produces a
+\verb{slides/} directory containing \code{slides.Rmd} (or \code{slides.qmd}). Set to
+e.g. \code{"presentation"} to get \code{presentation/presentation.Rmd} instead.}
+
+\item{report_title}{a character value used as the \verb{title:} field in the
+report document's YAML front matter. Defaults to \code{"Report"}.}
+
+\item{slides_title}{a character value used as the \verb{title:} field in the
+slides document's YAML front matter. Defaults to \code{"Presentation"}.}
+
+\item{author}{a character value used as the \verb{author:} field in all
+generated documents' YAML front matter. Defaults to \code{""} (empty).}
 }
 \value{
 Nothing. Modifies your workspace.
@@ -42,4 +66,16 @@ those objects into a results document. The results document itself goes
 through iterations designated by versions. This may seem unnecessary when
 using GitHub to handle version control, but it is often helpful to keep
 versions of old results documents in a space that is easy to access.
+}
+\details{
+Optional helper scripts (flextable formatting helpers, \code{data.table}
+helpers, tidyverse/dplyr helpers, Market Clarity database connection
+helpers) are \strong{not} added automatically. Use the \verb{use_helpers_*()}
+family of functions (e.g. \code{\link[=use_helpers_flextable]{use_helpers_flextable()}},
+\code{\link[=use_helpers_datatable]{use_helpers_datatable()}}, \code{\link[=use_helpers_tidyverse]{use_helpers_tidyverse()}},
+\code{\link[=use_helpers_market_clarity]{use_helpers_market_clarity()}}) to add them to \verb{R/} on demand, after
+running this function. The one exception is \code{include_tutorials = TRUE},
+which requires \code{summarize_each_group()}, \code{flextable_polish()}, and
+\code{flextable_polish_ppt()}, so \code{R/summarize_each_group.R} and
+\code{R/flextable.R} are added for you automatically in that case.
 }

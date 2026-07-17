@@ -1,16 +1,11 @@
 
-create_output_directories <- function(results_version_major){
+create_output_directories <- function(results_version_major,
+                                      dirs = c("{{{report_dir}}}", "{{{slides_dir}}}")) {
 
-  if(dir.exists('report')){
-    if(!dir.exists(glue("report/report-v{results_version_major}"))){
-      dir.create(glue("report/report-v{results_version_major}"))
-    }
-  }
-
-
-  if(dir.exists('slides')){
-    if(!dir.exists(glue("slides/slides-v{results_version_major}"))){
-      dir.create(glue("slides/slides-v{results_version_major}"))
+  for (d in dirs) {
+    if (dir.exists(d)) {
+      subdir <- paste0(d, "/", d, "-v", results_version_major)
+      if (!dir.exists(subdir)) dir.create(subdir)
     }
   }
 

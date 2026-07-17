@@ -4,7 +4,11 @@
 \alias{use_pericircumference_slides_ms}
 \title{Initialize a Microsoft PowerPoint slides project}
 \usage{
-use_pericircumference_slides_ms()
+use_pericircumference_slides_ms(...)
+}
+\arguments{
+\item{...}{additional arguments passed to \code{\link[=use_pericircumference]{use_pericircumference()}},
+e.g. \code{slides_name = "presentation"}.}
 }
 \value{
 Nothing. Modifies your workspace.
@@ -13,5 +17,5 @@ Nothing. Modifies your workspace.
 A wrapper around \code{\link[=use_pericircumference]{use_pericircumference()}} for experienced users who want
 to quickly set up a project with PowerPoint slides and no report or
 tutorials. Equivalent to calling
-\code{use_pericircumference(doc_format = "office", include_tutorials = FALSE, include_report = FALSE, include_slides = TRUE)}.
+\code{use_pericircumference(doc_format = "office", include_tutorials = FALSE, include_report = FALSE, include_slides = TRUE, ...)}.
 }
