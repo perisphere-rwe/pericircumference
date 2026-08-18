@@ -13,5 +13,6 @@ Nothing. Modifies your workspace.
 Copies \code{summarize_each_group.R} into the \verb{R/} directory of the current
 project. Contains \code{summarize_each_group()}, an extension of
 \code{dplyr::summarize()} that computes a summary for each group as well as
-an overall summary, stacking the results into a single data frame.
+an overall summary, stacking the results into a single data frame. Prints
+\code{add_package()} calls for the packages these helpers depend on.
 }
