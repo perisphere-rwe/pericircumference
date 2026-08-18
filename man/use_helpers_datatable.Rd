@@ -12,5 +12,6 @@ Nothing. Modifies your workspace.
 \description{
 Copies \code{shift.R} into the \verb{R/} directory of the current project. Contains
 \code{shift_forward()} and \code{shift_backward()}, wrappers around
-\code{data.table::shift()} that make the shift direction explicit.
+\code{data.table::shift()} that make the shift direction explicit. Prints
+\code{add_package()} calls for the packages these helpers depend on.
 }

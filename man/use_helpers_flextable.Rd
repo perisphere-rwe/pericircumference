@@ -13,5 +13,6 @@ Nothing. Modifies your workspace.
 Copies \code{flextable.R} into the \verb{R/} directory of the current project.
 Contains \code{flextable_polish()}, \code{flextable_polish_ppt()}, and
 \code{flextable_autofit()} — helper functions for building and styling
-\code{flextable} objects for Word/PowerPoint/Quarto output.
+\code{flextable} objects for Word/PowerPoint/Quarto output. Prints
+\code{add_package()} calls for the packages these helpers depend on.
 }

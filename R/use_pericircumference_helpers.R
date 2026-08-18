@@ -60,6 +60,24 @@
                         package = "pericircumference")
 }
 
+# .peri_suggest_packages --------------------------------------------------------
+
+.peri_suggest_packages <- function(pkgs, purposes = NULL) {
+
+  if (is.null(purposes)) purposes <- rep(NA_character_, length(pkgs))
+
+  calls <- ifelse(
+    is.na(purposes),
+    glue::glue('add_package("{pkgs}")'),
+    glue::glue('add_package("{pkgs}", "{purposes}")')
+  )
+
+  cli::cli_h3("Suggested packages")
+  cli::cli_alert_info("Add these to {.file packages.R} with {.fn add_package}:")
+  cli::cli_code(calls)
+
+}
+
 # .peri_add_pipeline -----------------------------------------------------------
 
 .peri_add_pipeline <- function(doc_format, tutorial_type, tmpl_data) {

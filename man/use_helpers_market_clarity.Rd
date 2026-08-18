@@ -17,7 +17,8 @@ Contains \code{connect_to_db()}, which connects either to a local DuckDB
 Databricks cluster via \code{sparklyr::spark_connect()} (\code{use_mini_db = FALSE}).
 }
 \details{
-\code{connect_to_db()} depends on the \code{DBI}, \code{duckdb}, and \code{sparklyr} packages
-being installed and loaded. Use \code{\link[=add_package]{add_package()}} to add whichever of
-these your project needs to \code{packages.R}.
+\code{connect_to_db()} depends on the \code{DBI}, \code{duckdb}, \code{sparklyr}, \code{stringr},
+\code{purrr}, and \code{glue} packages being installed and loaded. After the file
+is added, this function prints the corresponding \code{\link[=add_package]{add_package()}} calls
+for whichever of these your project needs to add to \code{packages.R}.
 }
