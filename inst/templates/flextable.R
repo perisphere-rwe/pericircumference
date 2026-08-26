@@ -4,13 +4,17 @@ flextable_polish <- function(ft,
                              font_name = "Arial",
                              font_size = 11,
                              header_text = NULL,
-                             footer_text = NULL) {
+                             footer_text = NULL,
+                             bold_row_index = NULL) {
 
   if(!is.null(header_text))
     ft <- ft %>% add_header_lines(header_text)
 
   if(!is.null(footer_text))
     ft <- ft %>% add_footer_lines(footer_text)
+
+  if(!is.null(bold_row_index))
+    ft <- ft %>% bold(i = bold_row_index, j = 1L)
 
   ft %>%
     bold(part = 'header') %>%
