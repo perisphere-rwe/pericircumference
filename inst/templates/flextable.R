@@ -1,16 +1,55 @@
 
-
 flextable_polish <- function(ft,
                              font_name = "Arial",
                              font_size = 11,
                              header_text = NULL,
-                             footer_text = NULL) {
+                             footer_text = NULL,
+                             bold_group_labels = TRUE,
+                             use_peripal = NULL,
+                             group_label_bg_alpha = 0.5) {
+
+  peripal_installed <- system.file(package = "peripal") != ""
+
+  if(is.null(use_peripal))
+    use_peripal <- peripal_installed
+
+  if(use_peripal & !peripal_installed)
+    cli::cli_abort(
+      message = paste0(
+        "{.code use_peripal} is TRUE, but peripal is not installed. ",
+        "Install peripal with ",
+        "{.run remotes::install_github('perisphere-rwe/peripal')}"
+      )
+    )
 
   if(!is.null(header_text))
     ft <- ft %>% add_header_lines(header_text)
 
   if(!is.null(footer_text))
     ft <- ft %>% add_footer_lines(footer_text)
+
+  if(use_peripal) {
+    bg_colors <- peripal::peripal(n = 2L)
+
+    ft <- ft %>% bg(i = 1L, bg = bg_colors[2L], part = "header") %>%
+      color(i = 1L, color = "white", part = "header")
+  }
+
+  is_grouped <- class(ft$body$dataset)[1L] == "grouped_data"
+
+  if (is_grouped) {
+    group_label_idx <- which(!is.na(ft$body$dataset[[1L]]))
+
+    if (bold_group_labels)
+      ft <- ft %>% bold(i = group_label_idx, j = 1L)
+
+    if (use_peripal)
+      ft <- ft %>%
+        bg(
+          i = group_label_idx,
+          bg = scales::alpha(bg_colors[1L], alpha = group_label_bg_alpha)
+        )
+  }
 
   ft %>%
     bold(part = 'header') %>%
