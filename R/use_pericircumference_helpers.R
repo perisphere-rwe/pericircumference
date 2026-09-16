@@ -168,3 +168,27 @@
   invisible(file.copy(src, to = save_as, overwrite = TRUE))
   cli::cli_alert_success("Writing {.file {save_as}}")
 }
+
+# .peri_check_installed_packages -----------------------------------------------
+
+.peri_check_installed_packages <- function(pkgs) {
+  pkgs <- sort(unique(pkgs))
+
+  pkg_installed <- vapply(pkgs,
+                          function(pkg) system.file(package = pkg) != "",
+                          logical(1L))
+
+  not_installed <- names(pkg_installed)[!pkg_installed]
+
+  if (length(not_installed) == 1L) {
+    warning(
+      "The following package is required, but not installed: ",
+      dQuote(not_installed, FALSE)
+    )
+  } else if (length(not_installed) > 1L) {
+    warning(
+      "The following packages are required, but not installed: ",
+      paste(dQuote(not_installed, FALSE), collapse = ", ")
+    )
+  }
+}
