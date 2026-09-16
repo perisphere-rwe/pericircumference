@@ -21,4 +21,4 @@ Suggests:
     withr
 URL: https://github.com/bcjaeger/pericircumference
 BugReports: https://github.com/bcjaeger/pericircumference/issues
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

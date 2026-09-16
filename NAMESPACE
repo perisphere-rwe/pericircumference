@@ -12,11 +12,16 @@ export(use_pericircumference_report_ms)
 export(use_pericircumference_report_qt)
 export(use_pericircumference_slides_ms)
 export(use_pericircumference_slides_qt)
+import(cli)
 importFrom(cli,symbol)
 importFrom(glue,glue)
-importFrom(readr,read_lines)
-importFrom(readr,read_rds)
-importFrom(readr,write_lines)
-importFrom(readr,write_rds)
-importFrom(usethis,use_directory)
-importFrom(usethis,use_template)
+importFrom(readr,
+  read_lines,
+  read_rds,
+  write_lines,
+  write_rds
+)
+importFrom(usethis,
+  use_directory,
+  use_template
+)
