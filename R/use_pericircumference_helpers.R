@@ -192,3 +192,33 @@
     )
   }
 }
+
+# .peri_check_template_pkgs ----------------------------------------------------
+
+.peri_check_template_pkgs <- function(pkgs) {
+
+  pkgs <- unique(pkgs)
+
+  template_pkgs <- c(
+    "checkmate" = "input validation",
+    "cli" = "command line interface helpers",
+    "data.table" = "fast data ops",
+    "DBI" = "dbConnect()/dbExecute() calls",
+    "dplyr" = "tidyverse data management",
+    "duckdb" = "local mini database connections",
+    "flextable" = "tables for office docs",
+    "glue" = "intuitive string concatenation",
+    "magrittr" = "pipes!",
+    "purrr" = "tidyverse iteration",
+    "sparklyr" = "full Databricks cluster connections",
+    "stringr" = "tidy string management",
+    "_NOMATCH_" = NA_character_
+  )
+
+  idx <- match(pkgs, names(template_pkgs), nomatch = length(template_pkgs))
+
+  pkg_purposes <- unname(template_pkgs[idx])
+
+  .peri_check_installed_packages(pkgs)
+  .peri_suggest_packages(pkgs, pkg_purposes)
+}

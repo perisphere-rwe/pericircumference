@@ -1,20 +1,4 @@
 
-template_pkgs <- c(
-  "checkmate" = "input validation",
-  "cli" = "command line interface helpers",
-  "data.table" = "fast data ops",
-  "DBI" = "dbConnect()/dbExecute() calls",
-  "dplyr" = "tidyverse data management",
-  "duckdb" = "local mini database connections",
-  "flextable" = "tables for office docs",
-  "glue" = "intuitive string concatenation",
-  "magrittr" = "pipes!",
-  "purrr" = "tidyverse iteration",
-  "sparklyr" = "full Databricks cluster connections",
-  "stringr" = "tidy string management"
-)
-
-
 #' Add flextable helper functions to R/
 #'
 #' Copies `flextable.R` into the `R/` directory of the current project.
@@ -30,13 +14,12 @@ template_pkgs <- c(
 #' @export
 #'
 use_helpers_flextable <- function() {
-  suggested_pkgs <- c("flextable", "magrittr", "cli")
-  pkg_purposes <- unname(template_pkgs[suggested_pkgs])
   .peri_assert_project_root()
   use_directory("R")
-  .peri_check_installed_packages(suggested_pkgs)
+  .peri_check_template_pkgs(
+    c("flextable", "magrittr", "cli")
+  )
   .peri_add_r_helpers_flex()
-  .peri_suggest_packages(suggested_pkgs, pkg_purposes)
 }
 
 #' Add data.table helper functions to R/
@@ -53,13 +36,12 @@ use_helpers_flextable <- function() {
 #' @export
 #'
 use_helpers_datatable <- function() {
-  suggested_pkgs <- c("data.table")
-  pkg_purposes <- unname(template_pkgs[suggested_pkgs])
   .peri_assert_project_root()
   use_directory("R")
-  .peri_check_installed_packages(suggested_pkgs)
+  .peri_check_template_pkgs(
+    c("data.table")
+  )
   .peri_add_r_helpers_datatable()
-  .peri_suggest_packages(suggested_pkgs, pkg_purposes)
 }
 
 #' Add tidyverse helper functions to R/
@@ -77,13 +59,12 @@ use_helpers_datatable <- function() {
 #' @export
 #'
 use_helpers_tidyverse <- function() {
-  suggested_pkgs <- c("dplyr", "purrr", "checkmate")
-  pkg_purposes <- unname(template_pkgs[suggested_pkgs])
   .peri_assert_project_root()
   use_directory("R")
-  .peri_check_installed_packages(suggested_pkgs)
+  .peri_check_template_pkgs(
+    c("dplyr", "purrr", "checkmate")
+  )
   .peri_add_r_helpers_tidyverse()
-  .peri_suggest_packages(suggested_pkgs, pkg_purposes)
 }
 
 #' Add Market Clarity database connection helpers to R/
@@ -108,13 +89,10 @@ use_helpers_tidyverse <- function() {
 #' @export
 #'
 use_helpers_market_clarity <- function() {
-  suggested_pkgs <- c(
-    "DBI", "duckdb", "sparklyr", "stringr", "purrr", "glue"
-  )
-  pkg_purposes <- unname(template_pkgs[suggested_pkgs])
   .peri_assert_project_root()
   use_directory("R")
-  .peri_check_installed_packages(suggested_pkgs)
+  .peri_check_template_pkgs(
+    c("DBI", "duckdb", "sparklyr", "stringr", "purrr", "glue")
+  )
   .peri_add_r_helpers_market_clarity()
-  .peri_suggest_packages(suggested_pkgs, pkg_purposes)
 }
