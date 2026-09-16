@@ -215,7 +215,9 @@
     "_NOMATCH_" = NA_character_
   )
 
-  idx <- match(pkgs, names(template_pkgs), nomatch = length(template_pkgs))
+  nomatch_idx <- which(names(template_pkgs) == "_NOMATCH_")
+
+  idx <- match(pkgs, names(template_pkgs), nomatch = nomatch_idx)
 
   pkg_purposes <- unname(template_pkgs[idx])
 
