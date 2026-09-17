@@ -183,46 +183,46 @@
 
   not_installed <- names(pkg_installed)[!pkg_installed]
 
-  # NOTE instead of matching the prefix, it may be better to have a character
-  # vector of all perisphere packages, but this will need to be updated whenever
-  # a new package is added.
-  perisphere_pkgs <- not_installed[grepl("^peri.*", not_installed)]
+  if (length(not_installed)) {
 
-  cran_pkgs <- setdiff(not_installed, perisphere_pkgs)
-
-  msg <- paste0(
-    "The following package{qty(%s)}{?s} {?is/are} required, ",
-    "but not installed: {.pkg {%s}}.\n",
-    "Install {?it/them} with {.run %s}."
-  )
-
-  msg_peri <- msg_cran <- NULL
-
-  # Perisphere packages
-  if (length(perisphere_pkgs)) {
-    github_paths <- file.path("perisphere-rwe", perisphere_pkgs)
-
-    install_peri <- sprintf(
-      "remotes::install_github(c(%s))",
-      paste(dQuote(github_paths, FALSE), collapse = ", ")
+    cli::cli_alert_warning(
+      paste0(
+        "The following package{qty(not_installed)}{?s} {?is/are} required, ",
+        "but not installed: {.pkg {not_installed}}."
+      )
     )
 
-    msg_peri <- sprintf(msg, "perisphere_pkgs", "perisphere_pkgs", install_peri)
-  }
+    perisphere_pkgs <- not_installed[grepl("^peri.*", not_installed)]
+    cran_pkgs <- setdiff(not_installed, perisphere_pkgs)
 
-  # CRAN packages
-  if (length(cran_pkgs)) {
+    install_peri <- sprintf(
+      "remotes::install_github(paste0(\"perisphere-rwe/\", c(%s)))",
+      paste(dQuote(perisphere_pkgs, FALSE), collapse = ", ")
+    )
+
     install_cran <- sprintf(
       "install.packages(c(%s))",
       paste(dQuote(cran_pkgs, FALSE), collapse = ", ")
     )
 
-    msg_cran <- sprintf(msg, "cran_pkgs", "cran_pkgs", install_cran)
-  }
+    if (length(cran_pkgs) && length(perisphere_pkgs)) {
+      msg_end <- "{.run {install_cran}} and {.run {install_peri}}."
+    } else {
+      msg_end <- ifelse(
+        length(cran_pkgs),
+        "{.run {install_cran}}.",
+        "{.run {install_peri}}."
+      )
+    }
 
-  cli::cli_alert_warning(
-    paste(msg_peri, msg_cran, sep = "\n\n")
-  )
+    cli::cli_alert_warning(
+      paste0(
+        "Install the package{qty(not_installed)}{?s} with ",
+        msg_end
+      )
+    )
+
+  }
 
 }
 
