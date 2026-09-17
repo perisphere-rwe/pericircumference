@@ -13,6 +13,7 @@ export(use_pericircumference_report_qt)
 export(use_pericircumference_slides_ms)
 export(use_pericircumference_slides_qt)
 import(cli)
+importFrom(available,available_on_cran)
 importFrom(cli,symbol)
 importFrom(glue,glue)
 importFrom(readr,
