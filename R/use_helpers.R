@@ -16,11 +16,10 @@
 use_helpers_flextable <- function() {
   .peri_assert_project_root()
   use_directory("R")
-  .peri_add_r_helpers_flex()
-  .peri_suggest_packages(
-    c("flextable", "magrittr"),
-    c("tables for office docs", "pipes!")
+  .peri_check_template_pkgs(
+    c("flextable", "magrittr", "cli")
   )
+  .peri_add_r_helpers_flex()
 }
 
 #' Add data.table helper functions to R/
@@ -39,8 +38,10 @@ use_helpers_flextable <- function() {
 use_helpers_datatable <- function() {
   .peri_assert_project_root()
   use_directory("R")
+  .peri_check_template_pkgs(
+    c("data.table")
+  )
   .peri_add_r_helpers_datatable()
-  .peri_suggest_packages("data.table", "fast data ops")
 }
 
 #' Add tidyverse helper functions to R/
@@ -60,11 +61,10 @@ use_helpers_datatable <- function() {
 use_helpers_tidyverse <- function() {
   .peri_assert_project_root()
   use_directory("R")
-  .peri_add_r_helpers_tidyverse()
-  .peri_suggest_packages(
-    c("dplyr", "purrr", "checkmate"),
-    c("tidyverse data management", "tidyverse iteration", "input validation")
+  .peri_check_template_pkgs(
+    c("dplyr", "purrr", "checkmate")
   )
+  .peri_add_r_helpers_tidyverse()
 }
 
 #' Add Market Clarity database connection helpers to R/
@@ -91,11 +91,8 @@ use_helpers_tidyverse <- function() {
 use_helpers_market_clarity <- function() {
   .peri_assert_project_root()
   use_directory("R")
-  .peri_add_r_helpers_market_clarity()
-  .peri_suggest_packages(
-    c("DBI", "duckdb", "sparklyr", "stringr", "purrr", "glue"),
-    c("dbConnect()/dbExecute() calls", "local mini database connections",
-      "full Databricks cluster connections", "tidy string management",
-      "tidyverse iteration", "intuitive string concatenation")
+  .peri_check_template_pkgs(
+    c("DBI", "duckdb", "sparklyr", "stringr", "purrr", "glue")
   )
+  .peri_add_r_helpers_market_clarity()
 }

@@ -11,13 +11,13 @@ connect_to_db <- function(use_mini_db = TRUE,
     fpath_mini_db <- fpath_mini_db %||%
       "/userdata/cfor/databases/Perishpere_Market_Clarity/databricks/random_sample"
 
-    con_mini_db <- dbConnect(duckdb())
+    con_mini_db <- DBI::dbConnect(duckdb::duckdb())
     # after making a duckdb connection, create a local database that
     # contains the tables in our shared file space
     tbl_names_mini_db <- list.files(fpath_mini_db,
                                     pattern = '\\.parquet',
                                     full.names = FALSE) %>%
-      str_remove('\\.parquet')
+      stringr::str_remove('\\.parquet')
 
     # this creates a view of each table stored in our shared file space
     # for your mini database. You need to have a view of a table in order
@@ -27,10 +27,12 @@ connect_to_db <- function(use_mini_db = TRUE,
     list.files(fpath_mini_db,
                pattern = '\\.parquet',
                full.names = TRUE) %>%
-      set_names(tbl_names_mini_db) %>%
-      iwalk(.f = ~ {
-        dbExecute(con_mini_db,
-                  glue("CREATE VIEW {.y} AS SELECT * from read_parquet('{.x}')"))
+      rlang::set_names(tbl_names_mini_db) %>%
+      purrr::iwalk(.f = ~ {
+        DBI::dbExecute(
+          con_mini_db,
+          glue::glue("CREATE VIEW {.y} AS SELECT * from read_parquet('{.x}')")
+        )
       })
 
     return(con_mini_db)
@@ -39,7 +41,7 @@ connect_to_db <- function(use_mini_db = TRUE,
 
   if (getRversion() >= "4.5.2") {
 
-    spark_connect(
+    sparklyr::spark_connect(
       cluster_id = Sys.getenv("DATABRICKS_CLUSTER_ID"),
       method = "databricks_connect",
       version = Sys.getenv("DATABRICKS_VERSION"),
@@ -48,7 +50,7 @@ connect_to_db <- function(use_mini_db = TRUE,
 
   } else {
 
-    spark_connect(
+    sparklyr::spark_connect(
       cluster_id = Sys.getenv("DATABRICKS_CLUSTER_ID"),
       method = "databricks_connect",
       version = Sys.getenv("DATABRICKS_VERSION")

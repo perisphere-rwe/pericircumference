@@ -168,3 +168,100 @@
   invisible(file.copy(src, to = save_as, overwrite = TRUE))
   cli::cli_alert_success("Writing {.file {save_as}}")
 }
+
+# .peri_check_installed_packages -----------------------------------------------
+
+#' @importFrom available available_on_cran
+#' @import cli
+
+.peri_check_installed_packages <- function(pkgs) {
+
+  pkgs <- sort(unique(pkgs))
+
+  pkg_installed <- vapply(
+    pkgs,
+    function(pkg) {
+      system.file(package = pkg) != ""
+    },
+    logical(1L)
+  )
+
+  not_installed <- names(pkg_installed)[!pkg_installed]
+
+  if (length(not_installed)) {
+
+    cli::cli_alert_warning(
+      paste0(
+        "The following package{qty(not_installed)}{?s} {?is/are} required, ",
+        "but not installed: {.pkg {not_installed}}."
+      )
+    )
+
+    cran_pkgs <- names(
+      which(
+        !vapply(not_installed, available::available_on_cran, logical(1L))
+      )
+    )
+
+    github_pkgs <- setdiff(not_installed, cran_pkgs)
+
+    install_cran <- sprintf(
+      "install.packages(c(%s))",
+      paste(dQuote(cran_pkgs, FALSE), collapse = ", ")
+    )
+
+    install_github <- sprintf(
+      "remotes::install_github(paste0(\"perisphere-rwe/\", c(%s)))",
+      paste(dQuote(github_pkgs, FALSE), collapse = ", ")
+    )
+
+    if (length(cran_pkgs) && length(github_pkgs)) {
+      msg_install <- "{.run {install_cran}} and {.run {install_github}}."
+    } else {
+      msg_install <- ifelse(
+        length(cran_pkgs),
+        "{.run {install_cran}}.",
+        "{.run {install_github}}."
+      )
+    }
+
+    cli::cli_alert_warning(
+      paste("Run", msg_install)
+    )
+
+  }
+
+}
+
+# .peri_check_template_pkgs ----------------------------------------------------
+
+.peri_check_template_pkgs <- function(pkgs) {
+
+  pkgs <- unique(pkgs)
+
+  template_pkgs <- c(
+    "checkmate" = "input validation",
+    "cli" = "command line interface helpers",
+    "data.table" = "fast data ops",
+    "DBI" = "dbConnect()/dbExecute() calls",
+    "dplyr" = "tidyverse data management",
+    "duckdb" = "local mini database connections",
+    "flextable" = "tables for office docs",
+    "glue" = "intuitive string concatenation",
+    "magrittr" = "pipes!",
+    "purrr" = "tidyverse iteration",
+    "sparklyr" = "full Databricks cluster connections",
+    "stringr" = "tidy string management",
+    "_NOMATCH_" = NA_character_
+  )
+
+  nomatch_idx <- which(names(template_pkgs) == "_NOMATCH_")
+
+  idx <- match(pkgs, names(template_pkgs), nomatch = nomatch_idx)
+
+  pkg_purposes <- unname(template_pkgs[idx])
+
+  .peri_check_installed_packages(pkgs)
+
+  .peri_suggest_packages(pkgs, pkg_purposes)
+}
