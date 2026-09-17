@@ -171,15 +171,20 @@
 
 # .peri_check_installed_packages -----------------------------------------------
 
+#' @importFrom available available_on_cran
 #' @import cli
 
 .peri_check_installed_packages <- function(pkgs) {
 
   pkgs <- sort(unique(pkgs))
 
-  pkg_installed <- vapply(pkgs,
-                          function(pkg) system.file(package = pkg) != "",
-                          logical(1L))
+  pkg_installed <- vapply(
+    pkgs,
+    function(pkg) {
+      system.file(package = pkg) != ""
+    },
+    logical(1L)
+  )
 
   not_installed <- names(pkg_installed)[!pkg_installed]
 
@@ -192,34 +197,36 @@
       )
     )
 
-    perisphere_pkgs <- not_installed[grepl("^peri.*", not_installed)]
-    cran_pkgs <- setdiff(not_installed, perisphere_pkgs)
-
-    install_peri <- sprintf(
-      "remotes::install_github(paste0(\"perisphere-rwe/\", c(%s)))",
-      paste(dQuote(perisphere_pkgs, FALSE), collapse = ", ")
+    cran_pkgs <- names(
+      which(
+        !vapply(not_installed, available::available_on_cran, logical(1L))
+      )
     )
+
+    github_pkgs <- setdiff(not_installed, cran_pkgs)
 
     install_cran <- sprintf(
       "install.packages(c(%s))",
       paste(dQuote(cran_pkgs, FALSE), collapse = ", ")
     )
 
-    if (length(cran_pkgs) && length(perisphere_pkgs)) {
-      msg_end <- "{.run {install_cran}} and {.run {install_peri}}."
+    install_github <- sprintf(
+      "remotes::install_github(paste0(\"perisphere-rwe/\", c(%s)))",
+      paste(dQuote(github_pkgs, FALSE), collapse = ", ")
+    )
+
+    if (length(cran_pkgs) && length(github_pkgs)) {
+      msg_install <- "{.run {install_cran}} and {.run {install_github}}."
     } else {
-      msg_end <- ifelse(
+      msg_install <- ifelse(
         length(cran_pkgs),
         "{.run {install_cran}}.",
-        "{.run {install_peri}}."
+        "{.run {install_github}}."
       )
     }
 
     cli::cli_alert_warning(
-      paste0(
-        "Install the package{qty(not_installed)}{?s} with ",
-        msg_end
-      )
+      paste("Run", msg_install)
     )
 
   }
